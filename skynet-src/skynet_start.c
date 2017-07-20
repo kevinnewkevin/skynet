@@ -182,8 +182,12 @@ thread_worker(void *p) {
 
 static void
 start(int thread) {
-	// 为什么要多加三个
-	pthread_t pid[thread+3];
+#ifdef _MSC_VER
+	assert(thread <= 32);
+	pthread_t pid[32 + 3];
+#else
+	pthread_t pid[thread + 3];
+#endif
 
 	struct monitor *m = skynet_malloc(sizeof(*m)); // 创建一个monitor
 	memset(m, 0, sizeof(*m));

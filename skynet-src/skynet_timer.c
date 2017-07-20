@@ -80,7 +80,7 @@ add_node(struct timer *T,struct timer_node *node) {
 	if ((time|TIME_NEAR_MASK)==(current_time|TIME_NEAR_MASK)) {  // 去掉后面8bit的不同
 		link(&T->near[time&TIME_NEAR_MASK],node);
 	} else {
-		int i                                                                                                                                                                                                                                                                                                                                  
+		int i;
 		uint32_t mask=TIME_NEAR << TIME_LEVEL_SHIFT;
 		for (i=0;i<3;i++) {
 			if ((time|(mask-1))==(current_time|(mask-1))) {     // 看他们是那个等级 6 + 6 + 6 + 8， 后面都放在4里
