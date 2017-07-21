@@ -22,7 +22,7 @@ EXPORTS
 
 	getpid
 	kill
-	;gethostname
+	gethostname
 	usleep
 	sleep
 	clock_gettime

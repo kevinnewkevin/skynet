@@ -135,6 +135,7 @@ retry:
 }
 #else
 #include <Windows.h>
+#include <pthread.h>
 int __sync_fetch_and_sub(int *ptr, int value) {
 	return InterlockedExchangeAdd(ptr, -value);
 }
@@ -156,11 +157,26 @@ int __sync_and_and_fetch(int *ptr, int value) {
 }
 
 bool __sync_bool_compare_and_swap(int *ptr, int oldval, int newval) {
+#if 1
+	pthread_mutex_t mtx;
+	pthread_mutex_init(&mtx, NULL);
+	pthread_mutex_lock(&mtx);
+	if (*ptr == oldval) {
+		*ptr = newval;
+		pthread_mutex_unlock(&mtx);
+		pthread_mutex_destroy(&mtx);
+		return true;
+	}
+	pthread_mutex_unlock(&mtx);
+	pthread_mutex_destroy(&mtx);
+	return false;
+#else
 	if (InterlockedCompareExchangeAcquire(ptr, newval, oldval) == oldval) {
 		return false;
 	} else {
 		return true;
 	}
+#endif
 }
 
 int  __sync_val_compare_and_swap(int *ptr, int oldval, int newval) {

@@ -130,7 +130,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;LUA_BUILD_AS_DLL;NOUSE_JEMALLOC;_DEBUG;_WINDOWS;_USRDLL;LUA53_EXPORTS;HAVE_STRUCT_TIMESPEC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\..\3rd\lua;..\..\..\skynet-src;..\posix;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\3rd\lua;..\..\..\skynet-src;..\..\posix;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

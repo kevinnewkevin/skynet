@@ -17,3 +17,11 @@
 build/vs2017/.vs
 build/vs2017/output
 build/vs2017/x64
+build/output
+lua53.dll
+posix.dll
+skynet.exe
+build/output/lpeg/Debug/lpeg.log
+build/output/lua53/Debug/lua53.log
+build/output/md5/Debug/md5.log
+build/output/posix/Debug/posix.log

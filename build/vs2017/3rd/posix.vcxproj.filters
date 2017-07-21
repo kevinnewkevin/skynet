@@ -19,54 +19,54 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\posix\cpoll\cpoll.cpp">
+    <ClCompile Include="..\..\posix\cpoll\cpoll.cpp">
       <Filter>Source files\cpoll</Filter>
     </ClCompile>
-    <ClCompile Include="..\posix\atomic_lock.c">
+    <ClCompile Include="..\..\posix\atomic_lock.c">
       <Filter>Source files</Filter>
     </ClCompile>
-    <ClCompile Include="..\posix\dlfcn.c">
+    <ClCompile Include="..\..\posix\dlfcn.c">
       <Filter>Source files</Filter>
     </ClCompile>
-    <ClCompile Include="..\posix\unistd.c">
+    <ClCompile Include="..\..\posix\unistd.c">
       <Filter>Source files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\posix\sys\file.h">
-      <Filter>Source files\sys</Filter>
-    </ClInclude>
-    <ClInclude Include="..\posix\sys\socket.h">
-      <Filter>Source files\sys</Filter>
-    </ClInclude>
-    <ClInclude Include="..\posix\arpa\inet.h">
+    <ClInclude Include="..\..\posix\arpa\inet.h">
       <Filter>Source files\arpa</Filter>
     </ClInclude>
-    <ClInclude Include="..\posix\netinet\in.h">
-      <Filter>Source files\netinet</Filter>
-    </ClInclude>
-    <ClInclude Include="..\posix\netinet\tcp.h">
-      <Filter>Source files\netinet</Filter>
-    </ClInclude>
-    <ClInclude Include="..\posix\cpoll\cpoll.h">
+    <ClInclude Include="..\..\posix\cpoll\cpoll.h">
       <Filter>Source files\cpoll</Filter>
     </ClInclude>
-    <ClInclude Include="..\posix\atomic_lock.h">
+    <ClInclude Include="..\..\posix\netinet\in.h">
+      <Filter>Source files\netinet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\posix\netinet\tcp.h">
+      <Filter>Source files\netinet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\posix\sys\file.h">
+      <Filter>Source files\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\posix\sys\socket.h">
+      <Filter>Source files\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\posix\atomic_lock.h">
       <Filter>Source files</Filter>
     </ClInclude>
-    <ClInclude Include="..\posix\dlfcn.h">
+    <ClInclude Include="..\..\posix\dlfcn.h">
       <Filter>Source files</Filter>
     </ClInclude>
-    <ClInclude Include="..\posix\pthread.h">
+    <ClInclude Include="..\..\posix\pthread.h">
       <Filter>Source files</Filter>
     </ClInclude>
-    <ClInclude Include="..\posix\sched.h">
+    <ClInclude Include="..\..\posix\sched.h">
       <Filter>Source files</Filter>
     </ClInclude>
-    <ClInclude Include="..\posix\semaphore.h">
+    <ClInclude Include="..\..\posix\semaphore.h">
       <Filter>Source files</Filter>
     </ClInclude>
-    <ClInclude Include="..\posix\unistd.h">
+    <ClInclude Include="..\..\posix\unistd.h">
       <Filter>Source files</Filter>
     </ClInclude>
   </ItemGroup>
