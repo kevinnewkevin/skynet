@@ -1,0 +1,11 @@
+﻿  lpvm.c
+d:\github\fork\skynet\3rd\lpeg\lpvm.c(7): fatal error C1083: Cannot open include file: 'string.h': No such file or directory
+  lptree.c
+d:\github\fork\skynet\3rd\lpeg\lptree.c(6): fatal error C1083: Cannot open include file: 'ctype.h': No such file or directory
+  lpprint.c
+d:\github\fork\skynet\3rd\lpeg\lpprint.c(6): fatal error C1083: Cannot open include file: 'ctype.h': No such file or directory
+  lpcode.c
+d:\github\fork\skynet\3rd\lua\lua.h(13): fatal error C1083: Cannot open include file: 'stddef.h': No such file or directory
+  lpcap.c
+d:\github\fork\skynet\3rd\lua\lua.h(13): fatal error C1083: Cannot open include file: 'stddef.h': No such file or directory
+  Generating Code...

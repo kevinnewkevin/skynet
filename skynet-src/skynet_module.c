@@ -13,9 +13,9 @@
 #define MAX_MODULE_TYPE 32
 
 struct modules {
-	int count;                                  // 当前模块数，也就是服务器数（这样说还是不正确，因为说的服务应该指的skynet_context生成的个数。
-	struct spinlock lock;                       // 用来锁插入模块操作
-	const char * path;                          // 此路径是相对与skynet的路径，接和路径就能用dlopen打开
+	int count;
+	struct spinlock lock;
+	const char * path;
 	struct skynet_module m[MAX_MODULE_TYPE];
 };
 
@@ -31,7 +31,11 @@ _try_open(struct modules *m, const char * name) {
 	int sz = path_size + name_size;
 	//search path
 	void * dl = NULL;
+#if defined(_MSC_VER)
+	char tmp[255];
+#else
 	char tmp[sz];
+#endif
 	do
 	{
 		memset(tmp,0,sz);
@@ -77,7 +81,11 @@ static void *
 get_api(struct skynet_module *mod, const char *api_name) {
 	size_t name_size = strlen(mod->name);
 	size_t api_size = strlen(api_name);
+#if defined(_MSC_VER)
+	char tmp[255 + 1];
+#else
 	char tmp[name_size + api_size + 1];
+#endif
 	memcpy(tmp, mod->name, name_size);
 	memcpy(tmp+name_size, api_name, api_size+1);
 	char *ptr = strrchr(tmp, '.');

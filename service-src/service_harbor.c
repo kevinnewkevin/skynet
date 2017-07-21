@@ -606,7 +606,11 @@ harbor_command(struct harbor * h, const char * msg, size_t sz, int session, uint
 	}
 	case 'S' :
 	case 'A' : {
+#ifdef _MSC_VER
+		char buffer[32 + 1];
+#else
 		char buffer[s+1];
+#endif
 		memcpy(buffer, name, s);
 		buffer[s] = 0;
 		int fd=0, id=0;

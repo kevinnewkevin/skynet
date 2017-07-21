@@ -11,6 +11,10 @@
 #include <mach/mach.h>
 #endif
 
+#if defined(_MSC_VER)
+#include <unistd.h>
+#endif
+
 #define NANOSEC 1000000000
 #define MICROSEC 1000000
 

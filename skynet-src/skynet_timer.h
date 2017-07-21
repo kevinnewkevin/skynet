@@ -8,6 +8,6 @@ void skynet_updatetime(void);
 uint32_t skynet_starttime(void);
 uint64_t skynet_thread_time(void);	// for profile, in micro second
 
-void skynet_timer_init(void);  // 初始化，程序最开始的时候
+void skynet_timer_init(void);
 
 #endif

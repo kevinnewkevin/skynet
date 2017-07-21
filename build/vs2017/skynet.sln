@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.14
+VisualStudioVersion = 15.0.26430.15
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "skynet", "skynet.vcxproj", "{C1C5A948-62E4-4D4F-9551-636CBB5ECC55}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -65,8 +65,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lua", "lua53.vcxproj", "{B7
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "posix", "3rd\posix.vcxproj", "{44F52237-AE31-499F-A74C-4E02B0FAD898}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mbedtls", "lualib\mbedtls.vcxproj", "{58C40686-8767-44E7-8236-2D1E4000BD60}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -188,14 +186,6 @@ Global
 		{44F52237-AE31-499F-A74C-4E02B0FAD898}.Release|Win32.Build.0 = Release|Win32
 		{44F52237-AE31-499F-A74C-4E02B0FAD898}.Release|x64.ActiveCfg = Release|x64
 		{44F52237-AE31-499F-A74C-4E02B0FAD898}.Release|x64.Build.0 = Release|x64
-		{58C40686-8767-44E7-8236-2D1E4000BD60}.Debug|Win32.ActiveCfg = Debug|Win32
-		{58C40686-8767-44E7-8236-2D1E4000BD60}.Debug|Win32.Build.0 = Debug|Win32
-		{58C40686-8767-44E7-8236-2D1E4000BD60}.Debug|x64.ActiveCfg = Debug|x64
-		{58C40686-8767-44E7-8236-2D1E4000BD60}.Debug|x64.Build.0 = Debug|x64
-		{58C40686-8767-44E7-8236-2D1E4000BD60}.Release|Win32.ActiveCfg = Release|Win32
-		{58C40686-8767-44E7-8236-2D1E4000BD60}.Release|Win32.Build.0 = Release|Win32
-		{58C40686-8767-44E7-8236-2D1E4000BD60}.Release|x64.ActiveCfg = Release|x64
-		{58C40686-8767-44E7-8236-2D1E4000BD60}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -213,6 +203,5 @@ Global
 		{17584D18-CFD0-45C3-8282-22DF81DA6906} = {8D77078A-D3DD-4C22-A938-7D1AF6456D67}
 		{996DE62B-C25C-476B-BE8A-3B17EE423BF7} = {8D77078A-D3DD-4C22-A938-7D1AF6456D67}
 		{44F52237-AE31-499F-A74C-4E02B0FAD898} = {223656D9-5628-47EA-8BB2-38A10EA727B2}
-		{58C40686-8767-44E7-8236-2D1E4000BD60} = {968950DD-91C6-4DB9-8A2E-7E10C89C75BB}
 	EndGlobalSection
 EndGlobal
