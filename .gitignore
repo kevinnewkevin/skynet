@@ -25,3 +25,7 @@ build/output/lpeg/Debug/lpeg.log
 build/output/lua53/Debug/lua53.log
 build/output/md5/Debug/md5.log
 build/output/posix/Debug/posix.log
+lua53.dll
+lua53.dll
+posix.dll
+skynet.exe
