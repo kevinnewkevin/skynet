@@ -1,0 +1,69 @@
+﻿  lzio.c
+d:\github\fork\skynet\3rd\lua\lzio.c(13): fatal error C1083: Cannot open include file: 'string.h': No such file or directory
+  lvm.c
+d:\github\fork\skynet\3rd\lua\lvm.c(12): fatal error C1083: Cannot open include file: 'float.h': No such file or directory
+  lutf8lib.c
+d:\github\fork\skynet\3rd\lua\lutf8lib.c(13): fatal error C1083: Cannot open include file: 'assert.h': No such file or directory
+  lundump.c
+d:\github\fork\skynet\3rd\lua\lundump.c(13): fatal error C1083: Cannot open include file: 'string.h': No such file or directory
+  ltm.c
+d:\github\fork\skynet\3rd\lua\ltm.c(13): fatal error C1083: Cannot open include file: 'string.h': No such file or directory
+  ltablib.c
+d:\github\fork\skynet\3rd\lua\ltablib.c(14): fatal error C1083: Cannot open include file: 'stddef.h': No such file or directory
+  ltable.c
+d:\github\fork\skynet\3rd\lua\ltable.c(26): fatal error C1083: Cannot open include file: 'math.h': No such file or directory
+  lstrlib.c
+d:\github\fork\skynet\3rd\lua\lstrlib.c(13): fatal error C1083: Cannot open include file: 'ctype.h': No such file or directory
+  lstring.c
+d:\github\fork\skynet\3rd\lua\lstring.c(13): fatal error C1083: Cannot open include file: 'string.h': No such file or directory
+  lstate.c
+d:\github\fork\skynet\3rd\lua\lstate.c(13): fatal error C1083: Cannot open include file: 'stddef.h': No such file or directory
+  lparser.c
+d:\github\fork\skynet\3rd\lua\lparser.c(13): fatal error C1083: Cannot open include file: 'string.h': No such file or directory
+  loslib.c
+d:\github\fork\skynet\3rd\lua\loslib.c(13): fatal error C1083: Cannot open include file: 'errno.h': No such file or directory
+  lopcodes.c
+d:\github\fork\skynet\3rd\lua\lopcodes.c(13): fatal error C1083: Cannot open include file: 'stddef.h': No such file or directory
+  lobject.c
+d:\github\fork\skynet\3rd\lua\lobject.c(13): fatal error C1083: Cannot open include file: 'locale.h': No such file or directory
+  loadlib.c
+d:\github\fork\skynet\3rd\lua\loadlib.c(17): fatal error C1083: Cannot open include file: 'stdio.h': No such file or directory
+  lmem.c
+d:\github\fork\skynet\3rd\lua\lmem.c(13): fatal error C1083: Cannot open include file: 'stddef.h': No such file or directory
+  lmathlib.c
+d:\github\fork\skynet\3rd\lua\lmathlib.c(13): fatal error C1083: Cannot open include file: 'stdlib.h': No such file or directory
+  llex.c
+d:\github\fork\skynet\3rd\lua\llex.c(13): fatal error C1083: Cannot open include file: 'locale.h': No such file or directory
+  liolib.c
+d:\github\fork\skynet\3rd\lua\liolib.c(13): fatal error C1083: Cannot open include file: 'ctype.h': No such file or directory
+  linit.c
+d:\github\fork\skynet\3rd\lua\linit.c(30): fatal error C1083: Cannot open include file: 'stddef.h': No such file or directory
+  Generating Code...
+  Compiling...
+  lgc.c
+d:\github\fork\skynet\3rd\lua\lgc.c(13): fatal error C1083: Cannot open include file: 'string.h': No such file or directory
+  lfunc.c
+d:\github\fork\skynet\3rd\lua\lfunc.c(13): fatal error C1083: Cannot open include file: 'stddef.h': No such file or directory
+  ldump.c
+d:\github\fork\skynet\3rd\lua\ldump.c(13): fatal error C1083: Cannot open include file: 'stddef.h': No such file or directory
+  ldo.c
+d:\github\fork\skynet\3rd\lua\ldo.c(14): fatal error C1083: Cannot open include file: 'stdlib.h': No such file or directory
+  ldebug.c
+d:\github\fork\skynet\3rd\lua\ldebug.c(14): fatal error C1083: Cannot open include file: 'stddef.h': No such file or directory
+  ldblib.c
+d:\github\fork\skynet\3rd\lua\ldblib.c(13): fatal error C1083: Cannot open include file: 'stdio.h': No such file or directory
+  lctype.c
+d:\github\fork\skynet\3rd\lua\lua.h(13): fatal error C1083: Cannot open include file: 'stddef.h': No such file or directory
+  lcorolib.c
+d:\github\fork\skynet\3rd\lua\lcorolib.c(13): fatal error C1083: Cannot open include file: 'stdlib.h': No such file or directory
+  lcode.c
+d:\github\fork\skynet\3rd\lua\lcode.c(13): fatal error C1083: Cannot open include file: 'math.h': No such file or directory
+  lbitlib.c
+d:\github\fork\skynet\3rd\lua\lua.h(13): fatal error C1083: Cannot open include file: 'stddef.h': No such file or directory
+  lbaselib.c
+d:\github\fork\skynet\3rd\lua\lbaselib.c(13): fatal error C1083: Cannot open include file: 'ctype.h': No such file or directory
+  lauxlib.c
+d:\github\fork\skynet\3rd\lua\lauxlib.c(13): fatal error C1083: Cannot open include file: 'errno.h': No such file or directory
+  lapi.c
+d:\github\fork\skynet\3rd\lua\lapi.c(14): fatal error C1083: Cannot open include file: 'string.h': No such file or directory
+  Generating Code...

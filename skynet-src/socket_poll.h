@@ -29,4 +29,8 @@ static void sp_nonblocking(int sock);
 #include "socket_kqueue.h"
 #endif
 
+#ifdef _MSC_VER
+#include "socket_cpoll.h"
+#endif
+
 #endif

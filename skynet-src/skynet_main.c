@@ -99,6 +99,9 @@ static const char * load_config = "\
 		else\n\
 			name = filename\n\
 		end\n\
+		print(current_path)\n\
+		current_path = 'examples/'\n\
+		name = 'config_log'\n\
 		local f = assert(io.open(current_path .. name))\n\
 		local code = assert(f:read [[*a]])\n\
 		code = string.gsub(code, [[%$([%w_%d]+)]], getenv)\n\
