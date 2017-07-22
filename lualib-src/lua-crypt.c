@@ -8,6 +8,11 @@
 #include <string.h>
 #include <stdlib.h>
 
+#ifdef _MSC_VER
+#include <unistd.h>
+#endif // _MSC_VER
+
+
 #define SMALL_CHUNK 256
 
 /* the eight DES S-boxes */

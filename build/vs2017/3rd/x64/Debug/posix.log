@@ -1,60 +1,24 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(387,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (lua53.vcxproj).  This can lead to incorrect clean and rebuild behavior.
   unistd.c
-d:\ember\documents\github\skynet\build\vs2017\posix\unistd.c(16): warning C4047: 'return': 'pid_t' differs in levels of indirection from 'HANDLE'
-d:\ember\documents\github\skynet\build\vs2017\posix\unistd.c(20): warning C4022: 'TerminateProcess': pointer mismatch for actual parameter 1
-d:\ember\documents\github\skynet\build\vs2017\posix\unistd.c(29): warning C4267: 'function': conversion from 'size_t' to 'DWORD', possible loss of data
-d:\ember\documents\github\skynet\build\vs2017\posix\unistd.c(44): warning C4267: 'function': conversion from 'size_t' to 'DWORD', possible loss of data
-d:\ember\documents\github\skynet\build\vs2017\posix\unistd.c(63): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
-d:\ember\documents\github\skynet\build\vs2017\posix\unistd.c(63): error C2143: syntax error: missing ';' before 'constant'
-d:\ember\documents\github\skynet\build\vs2017\posix\unistd.c(63): warning C4091: ' ': ignored on left of 'int' when no variable is declared
-d:\ember\documents\github\skynet\build\vs2017\posix\unistd.c(72): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
-d:\ember\documents\github\skynet\build\vs2017\posix\unistd.c(72): error C2143: syntax error: missing ';' before 'constant'
-d:\ember\documents\github\skynet\build\vs2017\posix\unistd.c(72): warning C4091: ' ': ignored on left of 'int' when no variable is declared
-d:\ember\documents\github\skynet\build\vs2017\posix\unistd.c(99): warning C4013: 'srand' undefined; assuming extern returning int
-d:\ember\documents\github\skynet\build\vs2017\posix\unistd.c(102): warning C4013: 'rand' undefined; assuming extern returning int
-d:\ember\documents\github\skynet\build\vs2017\posix\unistd.c(121): warning C4133: 'function': incompatible types - from 'size_t *' to 'int *'
-d:\ember\documents\github\skynet\build\vs2017\posix\unistd.c(94): warning C4244: 'initializing': conversion from 'SOCKET' to 'int', possible loss of data
-d:\ember\documents\github\skynet\build\vs2017\posix\unistd.c(113): warning C4244: 'initializing': conversion from 'SOCKET' to 'int', possible loss of data
-d:\ember\documents\github\skynet\build\vs2017\posix\unistd.c(121): warning C4244: 'initializing': conversion from 'SOCKET' to 'int', possible loss of data
-d:\ember\documents\github\skynet\build\vs2017\posix\unistd.c(147): warning C4090: '=': different 'const' qualifiers
-d:\ember\documents\github\skynet\build\vs2017\posix\unistd.c(148): warning C4267: '=': conversion from 'size_t' to 'ULONG', possible loss of data
-d:\ember\documents\github\skynet\build\vs2017\posix\unistd.c(166): warning C4018: '<': signed/unsigned mismatch
-d:\ember\documents\github\skynet\build\vs2017\posix\unistd.c(174): warning C4018: '>=': signed/unsigned mismatch
-d:\ember\documents\github\skynet\build\vs2017\posix\unistd.c(180): warning C4244: 'return': conversion from '__int64' to 'int', possible loss of data
-d:\ember\documents\github\skynet\build\vs2017\posix\unistd.c(185): warning C4267: '=': conversion from 'size_t' to 'ULONG', possible loss of data
-d:\ember\documents\github\skynet\build\vs2017\posix\unistd.c(208): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
-d:\ember\documents\github\skynet\build\vs2017\posix\unistd.c(208): error C2143: syntax error: missing ';' before 'constant'
-d:\ember\documents\github\skynet\build\vs2017\posix\unistd.c(208): warning C4091: ' ': ignored on left of 'int' when no variable is declared
-  dlfcn.c
-  atomic_lock.c
-d:\ember\documents\github\skynet\build\vs2017\posix\atomic_lock.c(3): error C2485: 'naked': unrecognized extended attribute
-d:\ember\documents\github\skynet\build\vs2017\posix\atomic_lock.c(4): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
-d:\ember\documents\github\skynet\build\vs2017\posix\atomic_lock.c(5): error C2065: 'push': undeclared identifier
-d:\ember\documents\github\skynet\build\vs2017\posix\atomic_lock.c(5): error C2146: syntax error: missing ';' before identifier 'ebp'
-d:\ember\documents\github\skynet\build\vs2017\posix\atomic_lock.c(6): error C2065: 'ebp': undeclared identifier
-d:\ember\documents\github\skynet\build\vs2017\posix\atomic_lock.c(6): error C2146: syntax error: missing ';' before identifier 'mov'
-d:\ember\documents\github\skynet\build\vs2017\posix\atomic_lock.c(6): error C2065: 'mov': undeclared identifier
-d:\ember\documents\github\skynet\build\vs2017\posix\atomic_lock.c(6): error C2146: syntax error: missing ';' before identifier 'ebp'
-d:\ember\documents\github\skynet\build\vs2017\posix\atomic_lock.c(7): error C2065: 'esp': undeclared identifier
-d:\ember\documents\github\skynet\build\vs2017\posix\atomic_lock.c(7): error C2146: syntax error: missing ';' before identifier 'mov'
-d:\ember\documents\github\skynet\build\vs2017\posix\atomic_lock.c(7): error C2065: 'mov': undeclared identifier
-d:\ember\documents\github\skynet\build\vs2017\posix\atomic_lock.c(7): error C2146: syntax error: missing ';' before identifier 'edx'
-d:\ember\documents\github\skynet\build\vs2017\posix\atomic_lock.c(7): error C2065: 'edx': undeclared identifier
-d:\ember\documents\github\skynet\build\vs2017\posix\atomic_lock.c(7): error C2059: syntax error: '['
-d:\ember\documents\github\skynet\build\vs2017\posix\atomic_lock.c(17): error C2485: 'naked': unrecognized extended attribute
-d:\ember\documents\github\skynet\build\vs2017\posix\atomic_lock.c(18): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
-d:\ember\documents\github\skynet\build\vs2017\posix\atomic_lock.c(30): error C2485: 'naked': unrecognized extended attribute
-d:\ember\documents\github\skynet\build\vs2017\posix\atomic_lock.c(31): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
-d:\ember\documents\github\skynet\build\vs2017\posix\atomic_lock.c(44): error C2485: 'naked': unrecognized extended attribute
-d:\ember\documents\github\skynet\build\vs2017\posix\atomic_lock.c(45): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
-d:\ember\documents\github\skynet\build\vs2017\posix\atomic_lock.c(60): error C2485: 'naked': unrecognized extended attribute
-d:\ember\documents\github\skynet\build\vs2017\posix\atomic_lock.c(61): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
-d:\ember\documents\github\skynet\build\vs2017\posix\atomic_lock.c(73): error C2485: 'naked': unrecognized extended attribute
-d:\ember\documents\github\skynet\build\vs2017\posix\atomic_lock.c(74): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
-d:\ember\documents\github\skynet\build\vs2017\posix\atomic_lock.c(86): error C2485: 'naked': unrecognized extended attribute
-d:\ember\documents\github\skynet\build\vs2017\posix\atomic_lock.c(87): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
-d:\ember\documents\github\skynet\build\vs2017\posix\atomic_lock.c(96): error C2485: 'naked': unrecognized extended attribute
-d:\ember\documents\github\skynet\build\vs2017\posix\atomic_lock.c(97): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
-d:\ember\documents\github\skynet\build\vs2017\posix\atomic_lock.c(111): error C2485: 'naked': unrecognized extended attribute
-d:\ember\documents\github\skynet\build\vs2017\posix\atomic_lock.c(112): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
-  Generating Code...
+d:\github\fork\skynet\build\vs2017\posix\unistd.c(16): warning C4047: 'return': 'pid_t' differs in levels of indirection from 'HANDLE'
+d:\github\fork\skynet\build\vs2017\posix\unistd.c(20): warning C4022: 'TerminateProcess': pointer mismatch for actual parameter 1
+d:\github\fork\skynet\build\vs2017\posix\unistd.c(29): warning C4267: 'function': conversion from 'size_t' to 'DWORD', possible loss of data
+d:\github\fork\skynet\build\vs2017\posix\unistd.c(44): warning C4267: 'function': conversion from 'size_t' to 'DWORD', possible loss of data
+d:\github\fork\skynet\build\vs2017\posix\unistd.c(102): warning C4013: 'srand' undefined; assuming extern returning int
+d:\github\fork\skynet\build\vs2017\posix\unistd.c(105): warning C4013: 'rand' undefined; assuming extern returning int
+d:\github\fork\skynet\build\vs2017\posix\unistd.c(124): warning C4133: 'function': incompatible types - from 'size_t *' to 'int *'
+d:\github\fork\skynet\build\vs2017\posix\unistd.c(97): warning C4244: 'initializing': conversion from 'SOCKET' to 'int', possible loss of data
+d:\github\fork\skynet\build\vs2017\posix\unistd.c(116): warning C4244: 'initializing': conversion from 'SOCKET' to 'int', possible loss of data
+d:\github\fork\skynet\build\vs2017\posix\unistd.c(124): warning C4244: 'initializing': conversion from 'SOCKET' to 'int', possible loss of data
+d:\github\fork\skynet\build\vs2017\posix\unistd.c(150): warning C4090: '=': different 'const' qualifiers
+d:\github\fork\skynet\build\vs2017\posix\unistd.c(151): warning C4267: '=': conversion from 'size_t' to 'ULONG', possible loss of data
+d:\github\fork\skynet\build\vs2017\posix\unistd.c(169): warning C4018: '<': signed/unsigned mismatch
+d:\github\fork\skynet\build\vs2017\posix\unistd.c(177): warning C4018: '>=': signed/unsigned mismatch
+d:\github\fork\skynet\build\vs2017\posix\unistd.c(183): warning C4244: 'return': conversion from '__int64' to 'int', possible loss of data
+d:\github\fork\skynet\build\vs2017\posix\unistd.c(188): warning C4267: '=': conversion from 'size_t' to 'ULONG', possible loss of data
+d:\github\fork\skynet\build\vs2017\posix\unistd.c(76): warning C4716: 'flock': must return a value
+  cpoll.cpp
+d:\github\fork\skynet\build\vs2017\posix\cpoll\cpoll.cpp(258): warning C4267: 'argument': conversion from 'size_t' to 'DWORD', possible loss of data
+     Creating library D:\github\fork\skynet\build\vs2017\x64\Debug\posix.lib and object D:\github\fork\skynet\build\vs2017\x64\Debug\posix.exp
+  posix.vcxproj -> D:\github\fork\skynet\build\vs2017\x64\Debug\posix.dll
+  posix.vcxproj -> D:\github\fork\skynet\build\vs2017\x64\Debug\posix.pdb (Partial PDB)

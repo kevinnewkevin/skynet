@@ -59,26 +59,43 @@ int clock_gettime(int what, struct timespec *ti) {
 		ti->tv_nsec = (LONGLONG)(counter.QuadPart / ((double)freq / NANOSEC)) % NANOSEC;
 		//ti->tv_nsec *= 1000;
 		return 0;
-	default:
-		__asm int 3;
 	}
-	break;
+	default:
+#if defined(_WIN32) && !defined(_WIN64)
+		__asm int 3;
+#else
+#endif //
+		return -1;
 	}
 	return -1;
 }
 
 int flock(int fd, int flag) {
 	// Not implemented
-	__asm int 3;
+	//__asm int 3;
 }
 
 void sigfillset(int *flag) {
 	// Not implemented
 }
 
-void sigaction(int flag, struct sigaction *action, int param) {
+int sigaction(int signo, struct sigaction *act, struct sigaction *oact) {
 	// Not implemented
 	//__asm int 3;
+	switch (signo) {
+	case SIGPIPE:
+	{
+
+	}
+		break;
+	case SIGHUP:
+	{
+		signal(SIGABRT, act->sa_handler);
+	}
+	break;
+	default:
+		break;
+	}
 }
 
 static void
@@ -205,7 +222,10 @@ int close(int fd) {
 
 int daemon(int a, int b) {
 	// Not implemented
+#if defined(_WIN32) && !defined(_WIN64)
 	__asm int 3;
+#else
+#endif // 
 	return 0;
 }
 

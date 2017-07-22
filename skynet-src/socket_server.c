@@ -96,18 +96,18 @@ struct socket {
 
 struct socket_server {
 	int recvctrl_fd;
-	int sendctrl_fd;                        // 发送消息
-	int checkctrl;                          // 这他妈干啥的
-	poll_fd event_fd;                       // 这是poll_fd
+	int sendctrl_fd;
+	int checkctrl;
+	poll_fd event_fd;
 	int alloc_id;
 	int event_n;
 	int event_index;
-	struct socket_object_interface soi;     // 主要是一些借口，现在还不知道干嘛用
+	struct socket_object_interface soi;
 	struct event ev[MAX_EVENT];
-	struct socket slot[MAX_SOCKET];         // 为什么要创建这么多的socket
-	char buffer[MAX_INFO];                  // 这个buffer干嘛的
-	uint8_t udpbuffer[MAX_UDP_PACKAGE];     // udp包的
-	fd_set rfds;                            // 所有文件
+	struct socket slot[MAX_SOCKET];
+	char buffer[MAX_INFO];
+	uint8_t udpbuffer[MAX_UDP_PACKAGE];
+	fd_set rfds;
 };
 
 struct request_open {
@@ -188,7 +188,7 @@ struct request_udp {
  */
 
 struct request_package {
-	uint8_t header[8];	// 6 bytes dummy   // 如果说这里是用来分配类型的
+	uint8_t header[8];	// 6 bytes dummy
 	union {
 		char buffer[256];
 		struct request_open open;
@@ -323,6 +323,9 @@ clear_wb_list(struct wb_list *list) {
 
 struct socket_server * 
 socket_server_create() {
+#ifdef _MSC_VER
+	cpoll_startup();
+#endif
 	int i;
 	int fd[2];
 	poll_fd efd = sp_create();
@@ -346,9 +349,9 @@ socket_server_create() {
 
 	struct socket_server *ss = MALLOC(sizeof(*ss));
 	ss->event_fd = efd;
-	ss->recvctrl_fd = fd[0];                        // read
-	ss->sendctrl_fd = fd[1];                        // write
-	ss->checkctrl = 1;                              // 1
+	ss->recvctrl_fd = fd[0];
+	ss->sendctrl_fd = fd[1];
+	ss->checkctrl = 1;
 
 	for (i=0;i<MAX_SOCKET;i++) {
 		struct socket *s = &ss->slot[i];
@@ -361,7 +364,9 @@ socket_server_create() {
 	ss->event_index = 0;
 	memset(&ss->soi, 0, sizeof(ss->soi));
 	FD_ZERO(&ss->rfds);
+#ifndef _MSC_VER
 	assert(ss->recvctrl_fd < FD_SETSIZE);
+#endif
 
 	return ss;
 }
@@ -430,6 +435,9 @@ socket_server_release(struct socket_server *ss) {
 	close(ss->recvctrl_fd);
 	sp_release(ss->event_fd);
 	FREE(ss);
+#ifdef _MSC_VER
+	cpoll_cleanup();
+#endif
 }
 
 static inline void
@@ -497,8 +505,14 @@ open_socket(struct socket_server *ss, struct request_open * request, struct sock
 			continue;
 		}
 		socket_keepalive(sock);
+#ifdef _MSC_VER
+		status = connect(sock, ai_ptr->ai_addr, ai_ptr->ai_addrlen);
+		sp_nonblocking(sock);
+#else
 		sp_nonblocking(sock);
 		status = connect( sock, ai_ptr->ai_addr, ai_ptr->ai_addrlen);
+#endif
+
 		if ( status != 0 && errno != EINPROGRESS) {
 			close(sock);
 			sock = -1;
@@ -991,10 +1005,10 @@ has_cmd(struct socket_server *ss) {
 	struct timeval tv = {0,0};
 	int retval;
 
-	FD_SET(ss->recvctrl_fd, &ss->rfds);                               // 把recvctrl_fd加入rfds，判断是否有消息
+	FD_SET(ss->recvctrl_fd, &ss->rfds);
 
-	retval = select(ss->recvctrl_fd+1, &ss->rfds, NULL, NULL, &tv);  
-	if (retval == 1) {  // 如果为1，那么准备可以读的，是管道fd对【o]
+	retval = select(ss->recvctrl_fd+1, &ss->rfds, NULL, NULL, &tv);
+	if (retval == 1) {
 		return 1;
 	}
 	return 0;
@@ -1305,8 +1319,8 @@ clear_closed_event(struct socket_server *ss, struct socket_message * result, int
 int 
 socket_server_poll(struct socket_server *ss, struct socket_message * result, int * more) {
 	for (;;) {
-		if (ss->checkctrl) {                               // 用检测是否有命令
-			if (has_cmd(ss)) {                             // 返回1，说明有读的内容
+		if (ss->checkctrl) {
+			if (has_cmd(ss)) {
 				int type = ctrl_cmd(ss, result);
 				if (type != -1) {
 					clear_closed_event(ss, result, type);
@@ -1406,7 +1420,6 @@ socket_server_poll(struct socket_server *ss, struct socket_message * result, int
 	}
 }
 
-// 所有都通过ss->sendctrl_fd发送命令
 static void
 send_request(struct socket_server *ss, struct request_package *request, char type, int len) {
 	request->header[6] = (uint8_t)type;
@@ -1461,7 +1474,7 @@ can_direct_write(struct socket *s, int id) {
 // return -1 when error, 0 when success
 int 
 socket_server_send(struct socket_server *ss, int id, const void * buffer, int sz) {
-	struct socket * s = &ss->slot[HASH_ID(id)];                     // 此socket对应节点的socket。
+	struct socket * s = &ss->slot[HASH_ID(id)];
 	if (s->id != id || s->type == SOCKET_TYPE_INVALID) {
 		free_buffer(ss, buffer, sz);
 		return -1;

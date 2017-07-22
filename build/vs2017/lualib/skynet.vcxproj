@@ -20,20 +20,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\lualib-src\lsha1.c" />
-    <ClCompile Include="..\..\..\lualib-src\lsignal\lsignal.c" />
-    <ClCompile Include="..\..\..\lualib-src\ltask\handlemap.c" />
-    <ClCompile Include="..\..\..\lualib-src\ltask\ltask.c" />
-    <ClCompile Include="..\..\..\lualib-src\ltask\queue.c" />
-    <ClCompile Include="..\..\..\lualib-src\ltask\schedule.c" />
-    <ClCompile Include="..\..\..\lualib-src\ltask\serialize.c" />
     <ClCompile Include="..\..\..\lualib-src\lua-cluster.c" />
     <ClCompile Include="..\..\..\lualib-src\lua-crypt.c" />
     <ClCompile Include="..\..\..\lualib-src\lua-datasheet.c" />
     <ClCompile Include="..\..\..\lualib-src\lua-debugchannel.c" />
-    <ClCompile Include="..\..\..\lualib-src\lua-marshal.c" />
     <ClCompile Include="..\..\..\lualib-src\lua-memory.c" />
     <ClCompile Include="..\..\..\lualib-src\lua-mongo.c" />
-    <ClCompile Include="..\..\..\lualib-src\lua-msgpack.c" />
     <ClCompile Include="..\..\..\lualib-src\lua-multicast.c" />
     <ClCompile Include="..\..\..\lualib-src\lua-mysqlaux.c" />
     <ClCompile Include="..\..\..\lualib-src\lua-netpack.c" />
@@ -43,18 +35,9 @@
     <ClCompile Include="..\..\..\lualib-src\lua-skynet.c" />
     <ClCompile Include="..\..\..\lualib-src\lua-socket.c" />
     <ClCompile Include="..\..\..\lualib-src\lua-stm.c" />
-    <ClCompile Include="..\..\..\lualib-src\zset\lua-skiplist.c" />
-    <ClCompile Include="..\..\..\lualib-src\zset\skiplist.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\lualib-src\ltask\handlemap.h" />
-    <ClInclude Include="..\..\..\lualib-src\ltask\queue.h" />
-    <ClInclude Include="..\..\..\lualib-src\ltask\schedule.h" />
-    <ClInclude Include="..\..\..\lualib-src\ltask\serialize.h" />
-    <ClInclude Include="..\..\..\lualib-src\ltask\simplelock.h" />
-    <ClInclude Include="..\..\..\lualib-src\ltask\simplethread.h" />
     <ClInclude Include="..\..\..\lualib-src\lua-seri.h" />
-    <ClInclude Include="..\..\..\lualib-src\zset\skiplist.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\3rd\lua53.vcxproj">
@@ -146,7 +129,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;LUA_BUILD_AS_DLL;NOUSE_JEMALLOC;_DEBUG;_WINDOWS;_USRDLL;LUA53_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;LUA_BUILD_AS_DLL;NOUSE_JEMALLOC;_DEBUG;_WINDOWS;_USRDLL;LUA53_EXPORTS;HAVE_STRUCT_TIMESPEC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\..\..\3rd\lua;..\..\..\skynet-src;..\posix;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
