@@ -88,7 +88,11 @@ _forward_agent(struct gate * g, int fd, uint32_t agentaddr, uint32_t clientaddr)
 static void
 _ctrl(struct gate * g, const void * msg, int sz) {
 	struct skynet_context * ctx = g->ctx;
-	char tmp[sz+1];
+#ifdef _MSC_VER
+	char tmp[32 + 1];
+#else
+	char tmp[sz + 1];
+#endif // _MSC_VER
 	memcpy(tmp, msg, sz);
 	tmp[sz] = '\0';
 	char * command = tmp;
@@ -272,7 +276,7 @@ dispatch_socket_message(struct gate *g, const struct skynet_socket_message * mes
 }
 
 static int
-_cb(struct skynet_context * ctx, void * ud, int type, int session, uint32_t source, const void * msg, size_t sz) {
+_cb(struct skynet_context * ctx, void * ud, int type, int session, uint32_t source, const char * msg, size_t sz) {
 	struct gate *g = ud;
 	switch(type) {
 	case PTYPE_TEXT:
@@ -340,8 +344,13 @@ gate_init(struct gate *g , struct skynet_context * ctx, char * parm) {
 		return 1;
 	int max = 0;
 	int sz = strlen(parm)+1;
+#ifdef _MSC_VER
+	char watchdog[32];
+	char binding[32];
+#else
 	char watchdog[sz];
 	char binding[sz];
+#endif // _MSC_VER
 	int client_tag = 0;
 	char header;
 	int n = sscanf(parm, "%c %s %s %d %d", &header, watchdog, binding, &client_tag, &max);

@@ -16,8 +16,6 @@ bool __cdecl ATOM_CAS8(volatile int8_t *ptr, int8_t oval, int8_t nval) {
 	pthread_mutex_unlock(&mtx);
 	pthread_mutex_destroy(&mtx);
 	return false;
-	/*InterlockedCompareExchange(ptr, nval, oval);
-	return (*ptr == nval);*/
 }
 
 //bool ATOM_CAS16(volatile int16_t *ptr, int16_t oval, int16_t nval) {

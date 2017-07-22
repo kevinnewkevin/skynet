@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.15
+VisualStudioVersion = 15.0.26430.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "skynet", "skynet.vcxproj", "{C1C5A948-62E4-4D4F-9551-636CBB5ECC55}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -57,11 +57,6 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "snlua", "service\snlua.vcxproj", "{996DE62B-C25C-476B-BE8A-3B17EE423BF7}"
 	ProjectSection(ProjectDependencies) = postProject
 		{44F52237-AE31-499F-A74C-4E02B0FAD898} = {44F52237-AE31-499F-A74C-4E02B0FAD898}
-	EndProjectSection
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lua", "lua53.vcxproj", "{B7CAF74D-DFB8-4A3C-8CCF-30C21871AD50}"
-	ProjectSection(ProjectDependencies) = postProject
-		{2FF46585-569F-4371-85EE-55E41FD38E8B} = {2FF46585-569F-4371-85EE-55E41FD38E8B}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "posix", "3rd\posix.vcxproj", "{44F52237-AE31-499F-A74C-4E02B0FAD898}"
@@ -170,14 +165,6 @@ Global
 		{996DE62B-C25C-476B-BE8A-3B17EE423BF7}.Release|Win32.Build.0 = Release|Win32
 		{996DE62B-C25C-476B-BE8A-3B17EE423BF7}.Release|x64.ActiveCfg = Release|x64
 		{996DE62B-C25C-476B-BE8A-3B17EE423BF7}.Release|x64.Build.0 = Release|x64
-		{B7CAF74D-DFB8-4A3C-8CCF-30C21871AD50}.Debug|Win32.ActiveCfg = Debug|Win32
-		{B7CAF74D-DFB8-4A3C-8CCF-30C21871AD50}.Debug|Win32.Build.0 = Debug|Win32
-		{B7CAF74D-DFB8-4A3C-8CCF-30C21871AD50}.Debug|x64.ActiveCfg = Debug|x64
-		{B7CAF74D-DFB8-4A3C-8CCF-30C21871AD50}.Debug|x64.Build.0 = Debug|x64
-		{B7CAF74D-DFB8-4A3C-8CCF-30C21871AD50}.Release|Win32.ActiveCfg = Release|Win32
-		{B7CAF74D-DFB8-4A3C-8CCF-30C21871AD50}.Release|Win32.Build.0 = Release|Win32
-		{B7CAF74D-DFB8-4A3C-8CCF-30C21871AD50}.Release|x64.ActiveCfg = Release|x64
-		{B7CAF74D-DFB8-4A3C-8CCF-30C21871AD50}.Release|x64.Build.0 = Release|x64
 		{44F52237-AE31-499F-A74C-4E02B0FAD898}.Debug|Win32.ActiveCfg = Debug|Win32
 		{44F52237-AE31-499F-A74C-4E02B0FAD898}.Debug|Win32.Build.0 = Debug|Win32
 		{44F52237-AE31-499F-A74C-4E02B0FAD898}.Debug|x64.ActiveCfg = Debug|x64
