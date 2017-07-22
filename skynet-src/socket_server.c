@@ -299,7 +299,11 @@ reserve_id(struct socket_server *ss) {
 		}
 		struct socket *s = &ss->slot[HASH_ID(id)];
 		if (s->type == SOCKET_TYPE_INVALID) {
+#ifdef _MSC_VER
+			if (ATOM_CAS8(&s->type, SOCKET_TYPE_INVALID, SOCKET_TYPE_RESERVE)) {
+#else
 			if (ATOM_CAS(&s->type, SOCKET_TYPE_INVALID, SOCKET_TYPE_RESERVE)) {
+#endif
 				s->id = id;
 				// socket_server_udp_connect may inc s->udpconncting directly (from other thread, before new_fd), 
 				// so reset it to 0 here rather than in new_fd.
@@ -1055,7 +1059,11 @@ set_udp_address(struct socket_server *ss, struct request_setudp *request, struct
 	} else {
 		memcpy(s->p.udp_address, request->address, 1+2+16);	// 1 type, 2 port, 16 ipv6
 	}
+#ifdef _MSC_VER
+	ATOM_DEC16(&s->udpconnecting);
+#else
 	ATOM_DEC(&s->udpconnecting);
+#endif // _MSC_VER
 	return -1;
 }
 
@@ -1794,7 +1802,11 @@ socket_server_udp_connect(struct socket_server *ss, int id, const char * addr, i
 		socket_unlock(&l);
 		return -1;
 	}
+#ifdef _MSC_VER
+	ATOM_INC16(&s->udpconnecting);
+#else
 	ATOM_INC(&s->udpconnecting);
+#endif // _MSC_VER
 	socket_unlock(&l);
 
 	int status;

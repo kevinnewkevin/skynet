@@ -1,7 +1,18 @@
 #pragma once
+#ifndef dlfcn_h
+#define dlfcn_h
 
-enum { RTLD_NOW, RTLD_GLOBAL };
-void *dlopen(const char *path, int flag);
-const char *dlerror();
-void *dlsym(void *dl, const char *sym);
+enum { RTLD_NOW, RTLD_GLOBAL, RTLD_LOCAL };
+
+void *dlopen(const char *filename, int flag);
+
+char *dlerror(void);
+
+void *dlsym(void *handle, const char *symbol);
+
+int dlclose(void *handle);
+
+#endif // !dlfcn_h
+
+
 

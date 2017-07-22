@@ -111,7 +111,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;NOUSE_JEMALLOC;LUA_BUILD_AS_DLL;_DEBUG;_CONSOLE;_LIB;HAVE_STRUCT_TIMESPEC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NOUSE_JEMALLOC;LUA_BUILD_AS_DLL;_DEBUG;_CONSOLE;_LIB;HAVE_STRUCT_TIMESPEC;USE_PTHREAD_LOCK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>..\posix;..\..\3rd\lua;..\..\skynet-src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4244;4018;4996</DisableSpecificWarnings>

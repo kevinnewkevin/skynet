@@ -1,13 +1,6 @@
 EXPORTS
-	__sync_fetch_and_sub
-	__sync_fetch_and_add
-	__sync_add_and_fetch
-	__sync_sub_and_fetch
-	__sync_lock_test_and_set
-	__sync_lock_release
-	__sync_synchronize
-	__sync_bool_compare_and_swap
-	__sync_and_and_fetch
+	ATOM_CAS8
+	ATOM_CAS_POINTER
 
 	cpoll_startup
 	cpoll_create

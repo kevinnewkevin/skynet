@@ -25,3 +25,4 @@ build/vs2017/intermediate
 lua53.dll
 posix.dll
 skynet.exe
+*.exe

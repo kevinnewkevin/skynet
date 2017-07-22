@@ -22,13 +22,13 @@
     <ClCompile Include="..\..\posix\cpoll\cpoll.cpp">
       <Filter>Source files\cpoll</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\posix\atomic_lock.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\posix\dlfcn.c">
       <Filter>Source files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\posix\unistd.c">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\posix\atomicwin.c">
       <Filter>Source files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -51,9 +51,6 @@
     <ClInclude Include="..\..\posix\sys\socket.h">
       <Filter>Source files\sys</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\posix\atomic_lock.h">
-      <Filter>Source files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\posix\dlfcn.h">
       <Filter>Source files</Filter>
     </ClInclude>
@@ -67,6 +64,9 @@
       <Filter>Source files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\posix\unistd.h">
+      <Filter>Source files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\posix\atomicwin.h">
       <Filter>Source files</Filter>
     </ClInclude>
   </ItemGroup>
