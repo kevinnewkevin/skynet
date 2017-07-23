@@ -138,3 +138,5 @@ EXPORTS
 	skynet_isremote
 	skynet_callback
 	skynet_current_handle
+
+	skynet_logger_append

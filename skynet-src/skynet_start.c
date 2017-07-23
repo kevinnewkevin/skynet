@@ -9,6 +9,7 @@
 #include "skynet_socket.h"
 #include "skynet_daemon.h"
 #include "skynet_harbor.h"
+#include "skynet_logger.h"
 
 #include <pthread.h>
 #include <unistd.h>
@@ -126,6 +127,23 @@ signal_hup() {
 }
 
 static void *
+thread_logger(void *p) {
+	struct monitor * m = p;
+	skynet_initthread(THREAD_LOGGER);
+	for (;;) {
+		skynet_logger_update();
+		CHECK_ABORT
+			wakeup(m, m->count - 1);
+		usleep(2500);
+		if (SIG) {
+			signal_hup();
+			SIG = 0;
+		}
+	}
+	skynet_logger_exit();
+}
+
+static void *
 thread_timer(void *p) {
 	struct monitor * m = p;
 	skynet_initthread(THREAD_TIMER);
@@ -181,9 +199,10 @@ thread_worker(void *p) {
 static void
 start(int thread) {
 #if defined(_MSC_VER)
-	pthread_t pid[32 + 3];
+	assert(thread <= 32);
+	pthread_t pid[32 + 4];
 #else
-	pthread_t pid[thread+3];
+	pthread_t pid[thread+4];
 #endif
 
 	struct monitor *m = skynet_malloc(sizeof(*m));
@@ -208,6 +227,7 @@ start(int thread) {
 	create_thread(&pid[0], thread_monitor, m);
 	create_thread(&pid[1], thread_timer, m);
 	create_thread(&pid[2], thread_socket, m);
+	create_thread(&pid[3], thread_logger, m);
 
 	static int weight[] = { 
 		-1, -1, -1, -1, 0, 0, 0, 0,
@@ -227,10 +247,10 @@ start(int thread) {
 		} else {
 			wp[i].weight = 0;
 		}
-		create_thread(&pid[i+3], thread_worker, &wp[i]);
+		create_thread(&pid[i+4], thread_worker, &wp[i]);
 	}
 
-	for (i=0;i<thread+3;i++) {
+	for (i=0;i<thread+4;i++) {
 		pthread_join(pid[i], NULL); 
 	}
 
@@ -277,6 +297,7 @@ skynet_start(struct skynet_config * config) {
 	skynet_timer_init();
 	skynet_socket_init();
 	skynet_profile_enable(config->profile);
+	skynet_logger_init(1, "", "");
 
 	struct skynet_context *ctx = skynet_context_new(config->logservice, config->logger);
 	if (ctx == NULL) {

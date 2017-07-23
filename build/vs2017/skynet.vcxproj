@@ -178,6 +178,7 @@
     <ClCompile Include="..\..\skynet-src\skynet_handle.c" />
     <ClCompile Include="..\..\skynet-src\skynet_harbor.c" />
     <ClCompile Include="..\..\skynet-src\skynet_log.c" />
+    <ClCompile Include="..\..\skynet-src\skynet_logger.c" />
     <ClCompile Include="..\..\skynet-src\skynet_main.c" />
     <ClCompile Include="..\..\skynet-src\skynet_module.c" />
     <ClCompile Include="..\..\skynet-src\skynet_monitor.c" />
@@ -200,6 +201,7 @@
     <ClInclude Include="..\..\skynet-src\skynet_harbor.h" />
     <ClInclude Include="..\..\skynet-src\skynet_imp.h" />
     <ClInclude Include="..\..\skynet-src\skynet_log.h" />
+    <ClInclude Include="..\..\skynet-src\skynet_logger.h" />
     <ClInclude Include="..\..\skynet-src\skynet_malloc.h" />
     <ClInclude Include="..\..\skynet-src\skynet_module.h" />
     <ClInclude Include="..\..\skynet-src\skynet_monitor.h" />

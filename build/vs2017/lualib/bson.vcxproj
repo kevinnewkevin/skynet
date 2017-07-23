@@ -29,9 +29,6 @@
       <Project>{44f52237-ae31-499f-a74c-4e02b0fad898}</Project>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="bson.def" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{86FBA2CF-8084-43E9-A997-D765A3B24F7C}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>

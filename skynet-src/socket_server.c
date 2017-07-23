@@ -81,7 +81,11 @@ struct socket {
 	int fd;
 	int id;
 	uint8_t protocol;
+#ifdef _MSC_VER
+	uint32_t type;
+#else
 	uint8_t type;
+#endif // _MSC_VER
 	uint16_t udpconnecting;
 	int64_t warn_size;
 	union {
@@ -299,11 +303,7 @@ reserve_id(struct socket_server *ss) {
 		}
 		struct socket *s = &ss->slot[HASH_ID(id)];
 		if (s->type == SOCKET_TYPE_INVALID) {
-#ifdef _MSC_VER
-			if (ATOM_CAS8(&s->type, SOCKET_TYPE_INVALID, SOCKET_TYPE_RESERVE)) {
-#else
 			if (ATOM_CAS(&s->type, SOCKET_TYPE_INVALID, SOCKET_TYPE_RESERVE)) {
-#endif
 				s->id = id;
 				// socket_server_udp_connect may inc s->udpconncting directly (from other thread, before new_fd), 
 				// so reset it to 0 here rather than in new_fd.

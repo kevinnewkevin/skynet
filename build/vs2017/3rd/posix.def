@@ -1,5 +1,5 @@
 EXPORTS
-	ATOM_CAS8
+	ATOM_CAS
 	ATOM_CAS_POINTER
 
 	cpoll_startup

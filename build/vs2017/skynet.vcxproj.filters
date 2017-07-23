@@ -55,6 +55,9 @@
     <ClCompile Include="..\..\skynet-src\socket_server.c">
       <Filter>Source files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\skynet-src\skynet_logger.c">
+      <Filter>Source files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\skynet-src\atomic.h">
@@ -127,6 +130,9 @@
       <Filter>Source files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\skynet-src\skynet_compat.h">
+      <Filter>Source files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\skynet-src\skynet_logger.h">
       <Filter>Source files</Filter>
     </ClInclude>
   </ItemGroup>

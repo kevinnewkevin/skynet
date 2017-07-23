@@ -14,10 +14,10 @@
 *.pdb
 *.obj
 *.ilk
+*.dll
 *.exe
 build/vs2017/.vs
 build/vs2017/intermediate
 
 !build/vs2017/pthreadVC2.lib
 !pthreadVC2.dll
-*.dll

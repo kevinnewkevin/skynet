@@ -3,12 +3,9 @@
 
 #include <stdbool.h>
 #include <stdint.h>
-#include <Windows.h>
 
-
-bool __cdecl ATOM_CAS8(volatile int8_t *ptr, int8_t oval, int8_t nval);
 //bool __cdecl ATOM_CAS16(volatile int16_t *ptr, int16_t oval, int16_t nval);
-//bool __cdecl ATOM_CAS(volatile int32_t *ptr, int32_t oval, int32_t nval);
+bool __cdecl ATOM_CAS(volatile int32_t *ptr, int32_t oval, int32_t nval);
 
 bool __cdecl ATOM_CAS_POINTER(volatile void **ptr, void *oval, void *nval);
 

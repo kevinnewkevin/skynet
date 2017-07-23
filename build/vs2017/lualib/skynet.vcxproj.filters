@@ -6,22 +6,28 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\lualib-src\lua-seri.c">
+    <ClCompile Include="..\..\..\lualib-src\lsha1.c">
       <Filter>Source files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\lualib-src\lua-skynet.c">
+    <ClCompile Include="..\..\..\lualib-src\lua-bson.c">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lualib-src\lua-clientsocket.c">
       <Filter>Source files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\lualib-src\lua-cluster.c">
       <Filter>Source files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\lualib-src\lsha1.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\lualib-src\lua-crypt.c">
       <Filter>Source files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\lualib-src\lua-datasheet.c">
+      <Filter>Source files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\lualib-src\lua-debugchannel.c">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lualib-src\lua-log.c">
       <Filter>Source files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\lualib-src\lua-memory.c">
@@ -42,7 +48,13 @@
     <ClCompile Include="..\..\..\lualib-src\lua-profile.c">
       <Filter>Source files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\lualib-src\lua-seri.c">
+      <Filter>Source files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\lualib-src\lua-sharedata.c">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lualib-src\lua-skynet.c">
       <Filter>Source files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\lualib-src\lua-socket.c">
@@ -51,18 +63,10 @@
     <ClCompile Include="..\..\..\lualib-src\lua-stm.c">
       <Filter>Source files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\lualib-src\lua-datasheet.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\lualib-src\lua-seri.h">
       <Filter>Source files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="skynet.def">
-      <Filter>Source files</Filter>
-    </None>
   </ItemGroup>
 </Project>

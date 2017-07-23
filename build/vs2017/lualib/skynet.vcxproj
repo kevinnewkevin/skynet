@@ -19,11 +19,22 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\3rd\lua53.vcxproj">
+      <Project>{2ff46585-569f-4371-85ee-55e41fd38e8b}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\skynet.vcxproj">
+      <Project>{c1c5a948-62e4-4d4f-9551-636cbb5ecc55}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
     <ClCompile Include="..\..\..\lualib-src\lsha1.c" />
+    <ClCompile Include="..\..\..\lualib-src\lua-bson.c" />
+    <ClCompile Include="..\..\..\lualib-src\lua-clientsocket.c" />
     <ClCompile Include="..\..\..\lualib-src\lua-cluster.c" />
     <ClCompile Include="..\..\..\lualib-src\lua-crypt.c" />
     <ClCompile Include="..\..\..\lualib-src\lua-datasheet.c" />
     <ClCompile Include="..\..\..\lualib-src\lua-debugchannel.c" />
+    <ClCompile Include="..\..\..\lualib-src\lua-log.c" />
     <ClCompile Include="..\..\..\lualib-src\lua-memory.c" />
     <ClCompile Include="..\..\..\lualib-src\lua-mongo.c" />
     <ClCompile Include="..\..\..\lualib-src\lua-multicast.c" />
@@ -38,17 +49,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\lualib-src\lua-seri.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\3rd\lua53.vcxproj">
-      <Project>{2ff46585-569f-4371-85ee-55e41fd38e8b}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\skynet.vcxproj">
-      <Project>{c1c5a948-62e4-4d4f-9551-636cbb5ecc55}</Project>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="skynet.def" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{54AC9C4E-1946-4675-A431-5FBAEBFBF34F}</ProjectGuid>
