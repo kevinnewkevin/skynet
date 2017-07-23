@@ -129,18 +129,18 @@ signal_hup() {
 static void *
 thread_logger(void *p) {
 	struct monitor * m = p;
+	int i;
 	skynet_initthread(THREAD_LOGGER);
 	for (;;) {
-		skynet_logger_update();
 		CHECK_ABORT
-			wakeup(m, m->count - 1);
-		usleep(2500);
-		if (SIG) {
-			signal_hup();
-			SIG = 0;
+			skynet_logger_update();
+		for (i = 0; i<5; i++) {
+			CHECK_ABORT
+				sleep(1);
 		}
 	}
 	skynet_logger_exit();
+	return NULL;
 }
 
 static void *
@@ -297,7 +297,7 @@ skynet_start(struct skynet_config * config) {
 	skynet_timer_init();
 	skynet_socket_init();
 	skynet_profile_enable(config->profile);
-	skynet_logger_init(1, "", "");
+	skynet_logger_init(LOG_FATAL, NULL, NULL);
 
 	struct skynet_context *ctx = skynet_context_new(config->logservice, config->logger);
 	if (ctx == NULL) {

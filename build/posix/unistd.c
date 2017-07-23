@@ -13,11 +13,11 @@ static LONGLONG get_cpu_freq() {
 }
 
 pid_t getpid() {
-	return GetCurrentProcess();
+	return PtrToInt(GetCurrentProcess());
 }
 
 int kill(pid_t pid, int exit_code) {
-	return TerminateProcess(pid, exit_code);
+	return TerminateProcess( (HANDLE)IntToPtr(pid), exit_code);
 }
 
 

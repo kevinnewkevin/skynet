@@ -1,6 +1,7 @@
 #ifndef atomicwin_h
 #define atomicwin_h
 
+#include <Windows.h>
 #include <stdbool.h>
 #include <stdint.h>
 

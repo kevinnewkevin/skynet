@@ -29,14 +29,6 @@
 
 #define LOG_BUFFER_SIZE 4*1024*1024			// 一个LOG缓冲区4M
 
-enum logger_level {
-	LOG_DEBUG = 0,
-	LOG_INFO = 1,
-	LOG_WARNING = 2,
-	LOG_ERROR = 3,
-	LOG_FATAL = 4
-};
-
 struct buffer {
 	struct buffer* next;
 	char data[LOG_BUFFER_SIZE];
@@ -126,13 +118,45 @@ static const char* get_log_filename(struct logger *inst) {
 	return inst->filename;
 }
 
-static void open_or_create_dir(struct logger *inst) {
+static void check_dir(struct logger *inst) {
 #ifdef _MSC_VER
-	DWORD attr = GetFileAttributes(inst->dirname);
-	if (INVALID_FILE_ATTRIBUTES == attr) {
-
-	} else if (attr & FILE_ATTRIBUTE_DIRECTORY) { // dir
-
+	char path[32][32] = { 0 };  // 最多32个
+	int offset = 0;
+	int s = 0;
+	int p = 0;
+	int len = strlen(inst->dirname);
+	while (p < len) {
+		if (inst->dirname[p] == '\\' || inst->dirname[p] == '/') {
+			memcpy(path[offset], inst->dirname[s], p - s);
+			offset++;
+			s = ++p;
+		} else {
+			p++;
+		}
+	}
+	for (size_t i = 0; i < offset; i++) {
+		char tmp[64] = { 0 };
+		int tmpoffset = 0;
+		for (size_t j = 0; j <= i; j++) {
+			int l = strlen(path[j]);
+			memcpy(tmp + tmpoffset, path[j], l);
+			tmpoffset += l;
+#ifdef _MSC_VER
+			tmp[tmpoffset] = '\\';
+			tmpoffset++;
+#else
+#endif // _MSC_VER
+		}
+		tmp[tmpoffset] = '\0';
+		tmpoffset--;
+#ifdef _MSC_VER
+		DWORD attr = GetFileAttributes(inst->dirname);
+		if (INVALID_FILE_ATTRIBUTES == attr) {
+			CreateDirectory(tmp, NULL);
+		} else if (attr & FILE_ATTRIBUTE_DIRECTORY) { // dir
+		}
+#else
+#endif // _MSC_VER
 	}
 #else
 	// 如果不存在，创建文件夹
@@ -159,11 +183,12 @@ static void rollfile(struct logger *inst) {
 	if (inst->handle == stdin || inst->handle == stdout || inst->handle == stderr)
 		return;
 
+	// 结束原来的
 	if (inst->handle != NULL && inst->written_bytes > 0) {
 		fflush(inst->handle);
 		fclose(inst->handle);
 	}
-	open_or_create_dir(inst);
+	check_dir(inst);
 	while (1) {
 		char fullpath[128] = { 0 };
 		snprintf(fullpath, 128, "%s/%s", inst->dirname, get_log_filename(inst));
@@ -191,7 +216,7 @@ static void rollfile(struct logger *inst) {
 	}
 }
 
-void skynet_logger_init(int loglevel, const char *dirname, const char *basename) {
+void skynet_logger_init(logger_level loglevel, const char *dirname, const char *basename) {
 	struct logger *inst = (struct logger *)skynet_malloc(sizeof(*inst));
 	memset(inst, 0, sizeof(*inst));
 
