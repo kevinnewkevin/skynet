@@ -23,7 +23,7 @@
 #define ONE_MB	(1024*1024)
 #define DEFAULT_ROLL_SIZE (1024*ONE_MB)		// 日志文件达到1G，滚动一个新文件
 #define DEFAULT_BASENAME "default"
-#define DEFAULT_DIRNAME "."
+#define DEFAULT_DIRNAME "logs"
 #define DEFAULT_INTERVAL 5					// 日志同步到磁盘间隔时间
 
 
@@ -102,7 +102,7 @@ struct logger {
 static struct logger *TI = NULL;
 
 static const char* get_log_filename(struct logger *inst) {
-	memset(inst->filename, 0, 128);
+	memset(inst->filename, 0, 64);
 	struct tm tm;
 	time_t now = time(NULL);
 	localtime_r(&now, &tm);
@@ -125,6 +125,7 @@ static void check_dir(struct logger *inst) {
 	int s = 0;
 	int p = 0;
 	int len = strlen(inst->dirname);
+	assert(len > 0);
 	while (p < len) {
 		if (inst->dirname[p] == '\\' || inst->dirname[p] == '/') {
 			memcpy(path[offset], inst->dirname[s], p - s);
@@ -134,6 +135,10 @@ static void check_dir(struct logger *inst) {
 			p++;
 		}
 	}
+	assert(len == p);
+	memcpy(path[offset], &inst->dirname[s], p - s);
+	offset++;
+
 	for (size_t i = 0; i < offset; i++) {
 		char tmp[64] = { 0 };
 		int tmpoffset = 0;
@@ -147,12 +152,12 @@ static void check_dir(struct logger *inst) {
 #else
 #endif // _MSC_VER
 		}
-		tmp[tmpoffset] = '\0';
 		tmpoffset--;
+		tmp[tmpoffset] = '\0';
 #ifdef _MSC_VER
-		DWORD attr = GetFileAttributes(inst->dirname);
+		DWORD attr = GetFileAttributes(tmp);
 		if (INVALID_FILE_ATTRIBUTES == attr) {
-			CreateDirectory(tmp, NULL);
+			CreateDirectoryA((const char *)tmp, NULL);
 		} else if (attr & FILE_ATTRIBUTE_DIRECTORY) { // dir
 		}
 #else
@@ -191,7 +196,9 @@ static void rollfile(struct logger *inst) {
 	check_dir(inst);
 	while (1) {
 		char fullpath[128] = { 0 };
-		snprintf(fullpath, 128, "%s/%s", inst->dirname, get_log_filename(inst));
+		const char *dirname = inst->dirname;
+		const char *filename = get_log_filename(inst);
+		snprintf(fullpath, 128, "%s/%s", dirname, filename);
 		FILE *f = fopen(fullpath, "a+");
 		if (f == NULL) {
 			int saved_errno = errno;
@@ -220,7 +227,7 @@ void skynet_logger_init(logger_level loglevel, const char *dirname, const char *
 	struct logger *inst = (struct logger *)skynet_malloc(sizeof(*inst));
 	memset(inst, 0, sizeof(*inst));
 
-	inst->handle = stdout;
+	inst->handle = NULL;
 	inst->loglevel = loglevel;
 	inst->rollsize = DEFAULT_ROLL_SIZE;
 	inst->flush_interval = DEFAULT_INTERVAL;
@@ -233,8 +240,9 @@ void skynet_logger_init(logger_level loglevel, const char *dirname, const char *
 	inst->tm = tm;
 	
 	inst->curr_buffer = (struct buffer*)skynet_malloc(sizeof(struct buffer));
-	buffer_list_clear(&TI->wbuffers);
-	buffer_list_clear(&TI->sbuffers);
+	memset(inst->curr_buffer, 0, sizeof(struct buffer));
+	buffer_list_clear(&inst->wbuffers);
+	buffer_list_clear(&inst->sbuffers);
 
 	if (dirname == NULL)
 		strncpy(inst->dirname, DEFAULT_DIRNAME, 64);
@@ -246,10 +254,12 @@ void skynet_logger_init(logger_level loglevel, const char *dirname, const char *
 	else
 		strncpy(inst->basename, basename, 32);
 
-	pthread_mutex_init(inst->mtx, NULL);
-	pthread_cond_init(inst->cond, NULL);
+	pthread_mutex_init(&inst->mtx, NULL);
+	pthread_cond_init(&inst->cond, NULL);
 
 	inst->running = 1;
+
+	TI = inst;
 
 	rollfile(TI);
 	return ;

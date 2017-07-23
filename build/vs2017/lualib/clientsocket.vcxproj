@@ -29,9 +29,6 @@
       <Project>{44f52237-ae31-499f-a74c-4e02b0fad898}</Project>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="clientsocket.def" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{990A33D8-F729-4DC7-849D-3AE721DBF6A8}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>

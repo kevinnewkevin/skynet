@@ -22,9 +22,6 @@
     <ProjectReference Include="..\3rd\lua53.vcxproj">
       <Project>{2ff46585-569f-4371-85ee-55e41fd38e8b}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\skynet.vcxproj">
-      <Project>{c1c5a948-62e4-4d4f-9551-636cbb5ecc55}</Project>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\lualib-src\lsha1.c" />
