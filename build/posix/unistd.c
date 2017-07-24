@@ -1,16 +1,14 @@
-#include "unistd.h"
-#include <assert.h>
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 #define WIN32_LEAN_AND_MEAN
-#include <conio.h>
+
+#include "unistd.h"
 #include <Windows.h>
 #include <WinSock2.h>
-
-static LONGLONG get_cpu_freq() {
-    LARGE_INTEGER freq;
-    QueryPerformanceFrequency(&freq);
-	return freq.QuadPart;
-}
+#include <signal.h>
+#include <conio.h>
+#include <assert.h>
+#include <stdio.h>
+#include <pthread.h>
 
 pid_t getpid() {
 	return PtrToInt(GetCurrentProcess());
@@ -29,14 +27,17 @@ void usleep(size_t us) {
 		Sleep(us / 1000);
 		return;
 	}
-	LONGLONG delta = get_cpu_freq() / MICROSEC * us;
-	LARGE_INTEGER counter;
-	QueryPerformanceCounter(&counter);
-	LONGLONG start = counter.QuadPart;
+	// spin
+	LARGE_INTEGER freq;
+	QueryPerformanceFrequency(&freq);
+	LARGE_INTEGER start, end;
+	QueryPerformanceCounter(&start);
 	for(;;) {
-		QueryPerformanceCounter(&counter);
-		if(counter.QuadPart - start >= delta)
-			return;
+		QueryPerformanceCounter(&end);
+		size_t p = (start.QuadPart - end.QuadPart) * MICROSEC / freq.QuadPart;
+		if (p >= us) {
+			break;
+		}
 	}
 }
 
@@ -44,35 +45,38 @@ void sleep(size_t ms) {
 	Sleep(ms);
 }
 
-
-int clock_gettime(int what, struct timespec *ti) {
-
+int clock_gettime(int what, struct timespec *tp) {
 	switch(what) {
 	case CLOCK_MONOTONIC:
-	case CLOCK_REALTIME:
+	{
+		LARGE_INTEGER freq, cur;
+		QueryPerformanceFrequency(&freq);
+		QueryPerformanceCounter(&cur);
+		long long ns = cur.QuadPart * NANOSEC / freq.QuadPart;
+		tp->tv_sec = ns / NANOSEC;
+		tp->tv_nsec = ns % NANOSEC;
+		return 0;
+	}
+	case CLOCK_REALTIME: {
+		SYSTEMTIME st;
+		GetLocalTime(&st);
+		tp->tv_sec = st.wSecond;
+		tp->tv_nsec = st.wMilliseconds * 1000000;
+		return 0;
+	}
 	case CLOCK_THREAD_CPUTIME_ID: {
-		LONGLONG freq = get_cpu_freq();
-		LARGE_INTEGER counter;
-		QueryPerformanceCounter(&counter);
-
-		ti->tv_sec = counter.QuadPart / freq;
-		ti->tv_nsec = (LONGLONG)(counter.QuadPart / ((double)freq / NANOSEC)) % NANOSEC;
-		//ti->tv_nsec *= 1000;
+		LARGE_INTEGER freq, cur;
+		QueryPerformanceFrequency(&freq);
+		QueryPerformanceCounter(&cur);
+		long long ns = cur.QuadPart * NANOSEC / freq.QuadPart;
+		tp->tv_sec = ns / NANOSEC;
+		tp->tv_nsec = ns % NANOSEC;
 		return 0;
 	}
 	default:
-#if defined(_WIN32) && !defined(_WIN64)
-		__asm int 3;
-#else
-#endif //
 		return -1;
 	}
 	return -1;
-}
-
-int flock(int fd, int flag) {
-	// Not implemented
-	//__asm int 3;
 }
 
 void sigfillset(int *flag) {
@@ -98,16 +102,33 @@ int sigaction(int signo, struct sigaction *act, struct sigaction *oact) {
 	}
 }
 
+int daemon(int a, int b) {
+	// Not implemented
+#if defined(_WIN32) && !defined(_WIN64)
+	__asm int 3;
+#else
+#endif // 
+	return 0;
+}
+
+int flock(int fd, int flag) {
+	// Not implemented
+	//__asm int 3;
+}
+
+static int sendfd = -1;
+static int recvfd = -1;
+static int writebytes = 0;
+static int readbytes = 0;
+
 static void
 socket_keepalive(int fd) {
 	int keepalive = 1;
 	int ret = setsockopt(fd, SOL_SOCKET, SO_KEEPALIVE, (void *)&keepalive , sizeof(keepalive));  
-
 	assert(ret != SOCKET_ERROR);
 }
 
 int pipe(int fd[2]) {
-
 	int listen_fd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	struct sockaddr_in sin;
 	sin.sin_family = AF_INET;
@@ -123,110 +144,96 @@ int pipe(int fd[2]) {
 	}
 
 	listen(listen_fd, 5);
+	socket_keepalive(listen_fd);
 	printf("Windows sim pipe() listen at %s:%d\n", inet_ntoa(sin.sin_addr), ntohs(sin.sin_port));
 
-	socket_keepalive(listen_fd);
-
-	int client_fd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-	if(connect(client_fd, (struct sockaddr*)&sin, sizeof(sin)) == SOCKET_ERROR) {
+	sendfd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+	if(connect(sendfd, (struct sockaddr*)&sin, sizeof(sin)) == SOCKET_ERROR) {
 		closesocket(listen_fd);
 		return -1;
 	}
 
-    struct sockaddr_in client_addr;
-	size_t name_len = sizeof(client_addr);
-	int client_sock = accept(listen_fd, (struct sockaddr*)&client_addr, &name_len);
-	//FD_SET( clientSock, &g_fdClientSock);
-
-	// TODO: close listen_fd
-
-	fd[0] = client_sock;
-	fd[1] = client_fd;
-
-	socket_keepalive(client_sock);
-	socket_keepalive(client_fd);
+    struct sockaddr_in addr;
+	int addrlen = sizeof(addr);
+	recvfd = accept(listen_fd, (struct sockaddr*)&addr, &addrlen);
+	
+	socket_keepalive(recvfd);
+	socket_keepalive(sendfd);
+	fd[0] = recvfd;
+	fd[1] = sendfd;
+	writebytes = readbytes = 0;
 
 	return 0;
-
-	////HANDLE hReadPipe, hWritePipe;
-	//SECURITY_ATTRIBUTES sa;
-	//sa.nLength = sizeof(SECURITY_ATTRIBUTES);
-	//sa.lpSecurityDescriptor = NULL;
-	//sa.bInheritHandle = TRUE;
-	//if(CreatePipe(&fd[0],&fd[1],&sa,0))
-	//	return 0;
-	//return -1;
 }
 
-int write(int fd, const void *ptr, size_t sz) {
-
-	WSABUF vecs[1];
-	vecs[0].buf = ptr;
-	vecs[0].len = sz;
-
-    DWORD bytesSent;
-    if(WSASend(fd, vecs, 1, &bytesSent, 0, NULL, NULL))
-        return -1;
-    else
-        return bytesSent;
-	//DWORD writed = 0;
-	//if(WriteFile(fd, ptr, sz, &writed, NULL) == TRUE)
-	//	return writed;
-	//return -1;
+ssize_t write(int fd, const void *buf, size_t count) {
+	if (fd == sendfd) {
+		int err = send(fd, buf, count, 0);
+		if (err == SOCKET_ERROR) {
+			return -1;
+		}
+		fprintf(stderr, "write sendfd %d bytes\n", err);
+		writebytes += err;
+		while (writebytes != InterlockedAdd(&readbytes, 0)) {}
+		fprintf(stderr, "writebytes = %d bytes, radbytes = %d\n", writebytes, readbytes);
+		writebytes = 0;
+		InterlockedExchange(&readbytes, 0);
+		return err;
+	} else {
+		int err = send(fd, buf, count, 0);
+		if (err == SOCKET_ERROR) {
+			return -1;
+		}
+		return err;
+	}
 }
 
-int read(int fd, void *buffer, size_t sz) {
+ssize_t read(int fd, void *buf, size_t count) {
 
 	// read console input
 	if(fd == 0) {
-		char *buf = (char *) buffer;
-		while(buf - (char *) buffer < sz) {
-
+		char *ptr = buf;
+		while(ptr - (char *) buf < count) {
 			if(!_kbhit())
 				break;
 			char ch = _getch();
-			*buf++ = ch;
+			*ptr++ = ch;
 			_putch(ch);
 			if(ch == '\r') {
-				if(buf - (char *) buffer >= sz)
+				if(ptr - (char *) buf >= count)
 					break;
-				*buf++ = '\n';
+				*ptr++ = '\n';
 				_putch('\n');
 			}
 		}
-		return buf - (char *) buffer;
+		return ptr - (char *) buf;
+	} else if (fd == recvfd) {
+		int err = recv(fd, buf, count, 0);
+		if (err == SOCKET_ERROR) {
+			if (WSAGetLastError() == WSAECONNRESET) {
+				return 0;
+			}
+			return -1;
+		}
+
+		InterlockedAdd(&readbytes, err);
+		fprintf(stderr, "read recvfd %d bytes\n", err);
+		return err;
+	} else {
+		int err = recv(fd, buf, count, 0);
+		if (err == SOCKET_ERROR) {
+			if (WSAGetLastError() == WSAECONNRESET) {
+				return 0;
+			}
+			return -1;
+		}
+		return err;
 	}
-
-	WSABUF vecs[1];
-	vecs[0].buf = buffer;
-	vecs[0].len = sz;
-
-    DWORD bytesRecv = 0;
-    DWORD flags = 0;
-    if(WSARecv(fd, vecs, 1, &bytesRecv, &flags, NULL, NULL)) {
-		if(WSAGetLastError() == WSAECONNRESET)
-			return 0;
-        return -1;
-	} else
-        return bytesRecv;
-	//DWORD read = 0;
-	//if(ReadFile(fd, buffer, sz, &read, NULL) == TRUE)
-	//	return read;
-	//return -1;
 }
 
 int close(int fd) {
 	shutdown(fd, SD_BOTH);
 	return closesocket(fd);
-}
-
-int daemon(int a, int b) {
-	// Not implemented
-#if defined(_WIN32) && !defined(_WIN64)
-	__asm int 3;
-#else
-#endif // 
-	return 0;
 }
 
 char *strsep(char **stringp, const char *delim)

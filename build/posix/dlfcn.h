@@ -13,6 +13,3 @@ void *dlsym(void *handle, const char *symbol);
 int dlclose(void *handle);
 
 #endif // !dlfcn_h
-
-
-
