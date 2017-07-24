@@ -25,8 +25,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\lualib-src\lsha1.c" />
-    <ClCompile Include="..\..\..\lualib-src\lua-bson.c" />
-    <ClCompile Include="..\..\..\lualib-src\lua-clientsocket.c" />
     <ClCompile Include="..\..\..\lualib-src\lua-cluster.c" />
     <ClCompile Include="..\..\..\lualib-src\lua-crypt.c" />
     <ClCompile Include="..\..\..\lualib-src\lua-datasheet.c" />

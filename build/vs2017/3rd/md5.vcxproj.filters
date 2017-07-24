@@ -24,9 +24,4 @@
       <Filter>Source files</Filter>
     </ClInclude>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="md5.def">
-      <Filter>Source files</Filter>
-    </None>
-  </ItemGroup>
 </Project>

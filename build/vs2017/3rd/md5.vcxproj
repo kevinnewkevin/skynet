@@ -32,9 +32,6 @@
       <Project>{2ff46585-569f-4371-85ee-55e41fd38e8b}</Project>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="md5.def" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C00991CA-E0D6-4D47-9898-75060B7FEE92}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>

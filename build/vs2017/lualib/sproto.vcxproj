@@ -31,9 +31,6 @@
       <Project>{2ff46585-569f-4371-85ee-55e41fd38e8b}</Project>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="sproto.def" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{D673AEC1-6021-4164-8F6A-F60231469ADE}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>

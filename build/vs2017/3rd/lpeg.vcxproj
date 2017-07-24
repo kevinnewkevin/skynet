@@ -38,9 +38,6 @@
       <Project>{2ff46585-569f-4371-85ee-55e41fd38e8b}</Project>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="lpeg.def" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{A996AD2A-F480-4F93-9BF7-499379CDDDB5}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>

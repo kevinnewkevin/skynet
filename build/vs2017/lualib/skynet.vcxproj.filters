@@ -9,12 +9,6 @@
     <ClCompile Include="..\..\..\lualib-src\lsha1.c">
       <Filter>Source files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\lualib-src\lua-bson.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\lualib-src\lua-clientsocket.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\lualib-src\lua-cluster.c">
       <Filter>Source files</Filter>
     </ClCompile>
