@@ -176,8 +176,8 @@ ssize_t write(int fd, const void *buf, size_t count) {
 		writebytes += err;
 		while (writebytes != InterlockedAdd(&readbytes, 0)) {}
 		//fprintf(stderr, "writebytes = %d bytes, radbytes = %d\n", writebytes, readbytes);
+		InterlockedAdd(&readbytes, -writebytes);
 		writebytes = 0;
-		InterlockedExchange(&readbytes, 0);
 		return err;
 	} else {
 		int err = send(fd, buf, count, 0);
@@ -215,7 +215,6 @@ ssize_t read(int fd, void *buf, size_t count) {
 			}
 			return -1;
 		}
-
 		InterlockedAdd(&readbytes, err);
 		//fprintf(stderr, "read recvfd %d bytes\n", err);
 		return err;
