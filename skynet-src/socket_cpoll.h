@@ -7,6 +7,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <fcntl.h>
+#include <assert.h>
 #include "cpoll/cpoll.h"
 
 static bool 

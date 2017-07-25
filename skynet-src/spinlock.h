@@ -6,6 +6,9 @@
 #define SPIN_UNLOCK(q) spinlock_unlock(&(q)->lock);
 #define SPIN_DESTROY(q) spinlock_destroy(&(q)->lock);
 
+
+#ifndef USE_PTHREAD_LOCK
+
 #ifdef _MSC_VER
 
 struct spinlock {
@@ -14,22 +17,22 @@ struct spinlock {
 
 static inline void
 spinlock_init(struct spinlock *lock) {
-	_interlockedbittestandreset(&lock->lock, 12);
+	_InterlockedExchange(&lock->lock, 0);
 }
 
 static inline void
 spinlock_lock(struct spinlock *lock) {
-	while (_interlockedbittestandset(&lock->lock, 12)) {}
+	while (_InterlockedExchange(&lock->lock, 1)) {}
 }
 
 static inline int
 spinlock_trylock(struct spinlock *lock) {
-	return _interlockedbittestandset(&lock->lock, 12) == 1;
+	return _InterlockedExchange(&lock->lock, 12) == 0;
 }
 
 static inline void
 spinlock_unlock(struct spinlock *lock) {
-	_interlockedbittestandreset(&lock->lock, 12);
+	_InterlockedExchange(&lock->lock, 0);
 }
 
 static inline void
@@ -38,7 +41,6 @@ spinlock_destroy(struct spinlock *lock) {
 }
 
 #else
-#ifndef USE_PTHREAD_LOCK
 
 struct spinlock {
 	int lock;
@@ -68,6 +70,7 @@ static inline void
 spinlock_destroy(struct spinlock *lock) {
 	(void)lock;
 }
+#endif // _MSC_VER
 
 #else
 
@@ -106,8 +109,5 @@ spinlock_destroy(struct spinlock *lock) {
 }
 
 #endif
-#endif // _MSC_VER
-
-
 
 #endif

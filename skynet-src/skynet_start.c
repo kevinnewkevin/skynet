@@ -198,11 +198,20 @@ thread_worker(void *p) {
 
 static void
 start(int thread) {
+#ifdef LOGGER
 #if defined(_MSC_VER)
 	assert(thread <= 32);
 	pthread_t pid[32 + 4];
 #else
 	pthread_t pid[thread+4];
+#endif
+#else
+#if defined(_MSC_VER)
+	assert(thread <= 32);
+	pthread_t pid[32 + 3];
+#else
+	pthread_t pid[thread + 3];
+#endif
 #endif
 
 	struct monitor *m = skynet_malloc(sizeof(*m));
@@ -227,7 +236,9 @@ start(int thread) {
 	create_thread(&pid[0], thread_monitor, m);
 	create_thread(&pid[1], thread_timer, m);
 	create_thread(&pid[2], thread_socket, m);
+#ifdef LOGGER
 	create_thread(&pid[3], thread_logger, m);
+#endif // LOGGER
 
 	static int weight[] = { 
 		-1, -1, -1, -1, 0, 0, 0, 0,
@@ -247,12 +258,22 @@ start(int thread) {
 		} else {
 			wp[i].weight = 0;
 		}
-		create_thread(&pid[i+4], thread_worker, &wp[i]);
+#ifdef LOGGER
+		create_thread(&pid[i + 4], thread_worker, &wp[i]);
+#else
+		create_thread(&pid[i + 3], thread_worker, &wp[i]);
+#endif // LOGGER
 	}
 
-	for (i=0;i<thread+4;i++) {
-		pthread_join(pid[i], NULL); 
+#ifdef LOGGER
+	for (i = 0; i<thread + 4; i++) {
+		pthread_join(pid[i], NULL);
 	}
+#else
+	for (i = 0; i<thread + 3; i++) {
+		pthread_join(pid[i], NULL);
+	}
+#endif // LOGGER
 
 	free_monitor(m);
 }
@@ -297,7 +318,9 @@ skynet_start(struct skynet_config * config) {
 	skynet_timer_init();
 	skynet_socket_init();
 	skynet_profile_enable(config->profile);
+#ifdef LOGGER
 	skynet_logger_init(1, "", "");
+#endif // LOGGER
 
 	struct skynet_context *ctx = skynet_context_new(config->logservice, config->logger);
 	if (ctx == NULL) {
