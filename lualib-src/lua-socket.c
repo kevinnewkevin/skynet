@@ -443,7 +443,7 @@ lconnect(lua_State *L) {
 	size_t sz = 0;
 	const char * addr = luaL_checklstring(L,1,&sz);
 #ifdef _MSC_VER
-	char tmp[64];
+	char tmp[32];  // ipv6 31
 #else
 	char tmp[sz];
 #endif // _MSC_VER
@@ -632,7 +632,7 @@ ludp_connect(lua_State *L) {
 	size_t sz = 0;
 	const char * addr = luaL_checklstring(L,2,&sz);
 #ifdef _MSC_VER
-	char tmp[64];
+	char tmp[32]; // ipv6 31
 #else
 	char tmp[sz];
 #endif // _MSC_VER

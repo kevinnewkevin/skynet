@@ -6,6 +6,17 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <fcntl.h>
+#ifdef _MSC_VER
+#include <Windows.h>
+#include <strsafe.h>
+#pragma comment(lib, "advapi32.lib")
+
+#define SVCNAME TEXT("skynet");
+static SERVICE_STATUS             svc_status;
+static SERVICE_STATUS_HANDLE      svc_status_handle;
+static HANDLE                     svc_stop_event = NULL;
+#endif // _MSC_VER
+
 
 #include "skynet_daemon.h"
 
@@ -88,6 +99,51 @@ redirect_fds() {
 	close(nfd);
 
 	return 0;
+}
+
+static void daemon_main() {
+
+}
+
+int daemon_install(void) {
+#ifdef _MSC_VER
+	SC_HANDLE schSCManager;
+	SC_HANDLE schService;
+	char path[MAX_PATH];
+	if (!GetModuleFileName("", path, MAX_PATH)) {
+		fprintf(stderr, "cannot install service %d", GetLastError());
+		return -1;
+	}
+
+	// 
+	schSCManager = OpenSCManager(
+		NULL,
+		NULL,
+		SC_MANAGER_ALL_ACCESS);
+	if (NULL == schSCManager) {
+		fprintf(stderr, "cannot open scmanager %d", GetLastError());
+	}
+	
+	schService = CreateService(schSCManager, TEXT("skynet"), TEXT("skynet"),
+				  SERVICE_ALL_ACCESS,
+				  SERVICE_WIN32_OWN_PROCESS,
+				  SERVICE_DEMAND_START,
+				  SERVICE_ERROR_NORMAL,
+				  path,
+				  NULL,
+				  NULL,
+				  NULL,
+				  NULL,
+				  NULL);
+	if (schService == NULL) {
+		fprintf(stderr, "createservice failed %d", GetLastError());
+		CloseServiceHandle(schSCManager);
+		return;
+	}
+	CloseServiceHandle(schService);
+	CloseServiceHandle(schSCManager);
+	return 0;
+#endif // _MSC_VER
 }
 
 int

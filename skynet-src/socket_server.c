@@ -566,14 +566,26 @@ send_list_tcp(struct socket_server *ss, struct socket *s, struct wb_list *list, 
 		for (;;) {
 			ssize_t sz = write(s->fd, tmp->ptr, tmp->sz);
 			if (sz < 0) {
-				switch(errno) {
+#ifdef _MSC_VER
+				int err = WSAGetLastError();
+				switch (err) {
+				case WSAEINTR:
+					continue;
+				case WSAEWOULDBLOCK:
+					return -1;
+				}
+				force_close(ss, s, l, result);
+				return SOCKET_CLOSE;
+#else
+				switch (errno) {
 				case EINTR:
 					continue;
 				case AGAIN_WOULDBLOCK:
 					return -1;
 				}
-				force_close(ss,s,l,result);
+				force_close(ss, s, l, result);
 				return SOCKET_CLOSE;
+#endif // _MSC_VER
 			}
 			s->wb_size -= sz;
 			if (sz != tmp->sz) {
@@ -623,12 +635,22 @@ send_list_udp(struct socket_server *ss, struct socket *s, struct wb_list *list, 
 		socklen_t sasz = udp_socket_address(s, tmp->udp_address, &sa);
 		int err = sendto(s->fd, tmp->ptr, tmp->sz, 0, &sa.s, sasz);
 		if (err < 0) {
-			switch(errno) {
+#ifdef _MSC_VER
+			int err = WSAGetLastError();
+			switch (err) {
+			case WSAEINTR:
+			case WSAEWOULDBLOCK:
+				return -1;
+			}
+			fprintf(stderr, "socket-server : udp (%d) sendto error %s.\n", s->id, strwsaerror(err));
+#else
+			switch (errno) {
 			case EINTR:
 			case AGAIN_WOULDBLOCK:
 				return -1;
 			}
-			fprintf(stderr, "socket-server : udp (%d) sendto error %s.\n",s->id, strerror(errno));
+			fprintf(stderr, "socket-server : udp (%d) sendto error %s.\n", s->id, strerror(errno));
+#endif // _MSC_VER
 			return -1;
 /*			// ignore udp sendto error
 			
@@ -1191,7 +1213,20 @@ forward_message_udp(struct socket_server *ss, struct socket *s, struct socket_lo
 	socklen_t slen = sizeof(sa);
 	int n = recvfrom(s->fd, ss->udpbuffer,MAX_UDP_PACKAGE,0,&sa.s,&slen);
 	if (n<0) {
-		switch(errno) {
+#ifdef _MSC_VER
+		int err = WSAGetLastError();
+		switch (err) {
+		case WSAEINTR:
+		case WSAEWOULDBLOCK:
+			break;
+		default:
+			force_close(ss, s, l, result);
+			result->data = strwsaerror(err);
+			return SOCKET_ERR;
+		}
+		return -1;
+#else
+		switch (errno) {
 		case EINTR:
 		case AGAIN_WOULDBLOCK:
 			break;
@@ -1202,6 +1237,7 @@ forward_message_udp(struct socket_server *ss, struct socket *s, struct socket_lo
 			return SOCKET_ERR;
 		}
 		return -1;
+#endif // _MSC_VER
 	}
 	uint8_t * data;
 	if (slen == sizeof(sa.v4)) {
@@ -1481,7 +1517,7 @@ can_direct_write(struct socket *s, int id) {
 
 // return -1 when error, 0 when success
 int 
-socket_server_send(struct socket_server *ss, int id, const void * buffer, int sz) {
+socket_server_send(struct socket_server *ss, int id, const char * buffer, int sz) {
 	struct socket * s = &ss->slot[HASH_ID(id)];
 	if (s->id != id || s->type == SOCKET_TYPE_INVALID) {
 		free_buffer(ss, buffer, sz);
@@ -1734,7 +1770,7 @@ socket_server_udp(struct socket_server *ss, uintptr_t opaque, const char * addr,
 }
 
 int 
-socket_server_udp_send(struct socket_server *ss, int id, const struct socket_udp_address *addr, const void *buffer, int sz) {
+socket_server_udp_send(struct socket_server *ss, int id, const struct socket_udp_address *addr, const char *buffer, int sz) {
 	struct socket * s = &ss->slot[HASH_ID(id)];
 	if (s->id != id || s->type == SOCKET_TYPE_INVALID) {
 		free_buffer(ss, buffer, sz);

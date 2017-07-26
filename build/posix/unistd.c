@@ -172,12 +172,12 @@ ssize_t write(int fd, const void *buf, size_t count) {
 		if (err == SOCKET_ERROR) {
 			return -1;
 		}
-		fprintf(stderr, "write sendfd %d bytes\n", err);
+		//fprintf(stderr, "write sendfd %d bytes\n", err);
 		writebytes += err;
 		while (writebytes != InterlockedAdd(&readbytes, 0)) {}
 		fprintf(stderr, "writebytes = %d bytes, radbytes = %d\n", writebytes, readbytes);
 		writebytes = 0;
-		InterlockedExchange(&readbytes, 0);
+		//InterlockedExchange(&readbytes, 0);
 		return err;
 	} else {
 		int err = send(fd, buf, count, 0);
@@ -217,7 +217,7 @@ ssize_t read(int fd, void *buf, size_t count) {
 		}
 
 		InterlockedAdd(&readbytes, err);
-		fprintf(stderr, "read recvfd %d bytes\n", err);
+		//fprintf(stderr, "read recvfd %d bytes\n", err);
 		return err;
 	} else {
 		int err = recv(fd, buf, count, 0);
@@ -259,4 +259,39 @@ char *strsep(char **stringp, const char *delim)
         } while (sc != 0);
     }
     /* NOTREACHED */
+}
+
+static char strwsaerrbuffer[128] = { 0 };
+static char strsyserrbuffer[128] = { 0 };
+
+const char *strwsaerror(int err) {
+	memset(strwsaerrbuffer, 0, 128);
+	if (FormatMessage(FORMAT_MESSAGE_IGNORE_INSERTS | FORMAT_MESSAGE_FROM_SYSTEM,
+					  NULL,
+					  err,
+					  0,
+					  strwsaerrbuffer,
+					  sizeof(strwsaerrbuffer) / sizeof(char),
+					  NULL)) {
+		return strwsaerrbuffer;
+	} else {
+		snprintf(strwsaerrbuffer, 128, "Format message failed with 0x%x\n", err);
+		return strwsaerrbuffer;
+	}
+}
+
+const char *strsyserror(int err) {
+	memset(strsyserrbuffer, 0, 128);
+	if (FormatMessage(FORMAT_MESSAGE_IGNORE_INSERTS | FORMAT_MESSAGE_FROM_SYSTEM,
+					  NULL,
+					  err,
+					  0,
+					  strwsaerrbuffer,
+					  sizeof(strwsaerrbuffer) / sizeof(char),
+					  NULL)) {
+		return strwsaerrbuffer;
+	} else {
+		snprintf(strwsaerrbuffer, 128, "Format message failed with 0x%x\n", err);
+		return strwsaerrbuffer;
+	}
 }

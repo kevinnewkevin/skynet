@@ -5,6 +5,7 @@ struct skynet_config {
 	int thread;
 	int harbor;
 	int profile;
+	int install;
 	const char * daemon;
 	const char * module_path;
 	const char * bootstrap;

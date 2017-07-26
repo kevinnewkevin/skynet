@@ -307,6 +307,9 @@ skynet_start(struct skynet_config * config) {
 	sigaction(SIGHUP, &sa, NULL);
 
 	if (config->daemon) {
+		if (config->install == 1) {
+			exit(daemon_install());
+		}
 		if (daemon_init(config->daemon)) {
 			exit(1);
 		}
