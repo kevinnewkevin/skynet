@@ -21,9 +21,6 @@
     <ClCompile Include="..\..\..\lualib-src\lua-debugchannel.c">
       <Filter>Source files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\lualib-src\lua-log.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\lualib-src\lua-memory.c">
       <Filter>Source files</Filter>
     </ClCompile>
@@ -55,6 +52,9 @@
       <Filter>Source files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\lualib-src\lua-stm.c">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lualib-src\lua-xlog.c">
       <Filter>Source files</Filter>
     </ClCompile>
   </ItemGroup>

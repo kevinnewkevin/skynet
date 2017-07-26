@@ -9,7 +9,7 @@
 #include "skynet_socket.h"
 #include "skynet_daemon.h"
 #include "skynet_harbor.h"
-#include "skynet_logger.h"
+#include "skynet_xlogger.h"
 
 #include <pthread.h>
 #include <unistd.h>
@@ -127,19 +127,18 @@ signal_hup() {
 }
 
 static void *
-thread_logger(void *p) {
+thread_xlogger(void *p) {
 	struct monitor * m = p;
 	int i;
-	skynet_initthread(THREAD_LOGGER);
+	skynet_initthread(THREAD_XLOGGER);
 	for (;;) {
-		CHECK_ABORT
-			skynet_logger_update();
+		skynet_xlogger_update();
 		for (i = 0; i<5; i++) {
 			CHECK_ABORT
 				sleep(1);
 		}
 	}
-	skynet_logger_exit();
+	skynet_xlogger_exit();
 	return NULL;
 }
 
@@ -198,7 +197,7 @@ thread_worker(void *p) {
 
 static void
 start(int thread) {
-#ifdef LOGGER
+#ifdef HAVE_XLOGGER
 #if defined(_MSC_VER)
 	assert(thread <= 32);
 	pthread_t pid[32 + 4];
@@ -236,8 +235,8 @@ start(int thread) {
 	create_thread(&pid[0], thread_monitor, m);
 	create_thread(&pid[1], thread_timer, m);
 	create_thread(&pid[2], thread_socket, m);
-#ifdef LOGGER
-	create_thread(&pid[3], thread_logger, m);
+#ifdef HAVE_XLOGGER
+	create_thread(&pid[3], thread_xlogger, m);
 #endif // LOGGER
 
 	static int weight[] = { 
@@ -258,14 +257,14 @@ start(int thread) {
 		} else {
 			wp[i].weight = 0;
 		}
-#ifdef LOGGER
+#ifdef HAVE_XLOGGER
 		create_thread(&pid[i + 4], thread_worker, &wp[i]);
 #else
 		create_thread(&pid[i + 3], thread_worker, &wp[i]);
 #endif // LOGGER
 	}
 
-#ifdef LOGGER
+#ifdef HAVE_XLOGGER
 	for (i = 0; i<thread + 4; i++) {
 		pthread_join(pid[i], NULL);
 	}
@@ -321,8 +320,8 @@ skynet_start(struct skynet_config * config) {
 	skynet_timer_init();
 	skynet_socket_init();
 	skynet_profile_enable(config->profile);
-#ifdef LOGGER
-	skynet_logger_init(LOG_FATAL, NULL, NULL);
+#ifdef HAVE_XLOGGER
+	skynet_xlogger_init(LOG_FATAL, NULL, NULL);
 #endif // LOGGER
 
 	struct skynet_context *ctx = skynet_context_new(config->logservice, config->logger);

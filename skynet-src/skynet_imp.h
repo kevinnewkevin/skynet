@@ -20,7 +20,7 @@ struct skynet_config {
 #define THREAD_SOCKET 2
 #define THREAD_TIMER 3
 #define THREAD_MONITOR 4
-#define THREAD_LOGGER 5
+#define THREAD_XLOGGER 5
 
 void skynet_start(struct skynet_config * config);
 

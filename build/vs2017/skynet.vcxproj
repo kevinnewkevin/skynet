@@ -111,7 +111,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;NOUSE_JEMALLOC;LUA_BUILD_AS_DLL;_DEBUG;_CONSOLE;_LIB;HAVE_STRUCT_TIMESPEC;USE_PTHREAD_LOCK;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NOUSE_JEMALLOC;LUA_BUILD_AS_DLL;_DEBUG;_CONSOLE;_LIB;HAVE_STRUCT_TIMESPEC;USE_PTHREAD_LOCK;_CRT_SECURE_NO_WARNINGS;HAVE_XLOGGER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>..\posix;..\..\3rd\lua;..\..\skynet-src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4244;4018;4996</DisableSpecificWarnings>
@@ -178,7 +178,7 @@
     <ClCompile Include="..\..\skynet-src\skynet_handle.c" />
     <ClCompile Include="..\..\skynet-src\skynet_harbor.c" />
     <ClCompile Include="..\..\skynet-src\skynet_log.c" />
-    <ClCompile Include="..\..\skynet-src\skynet_logger.c" />
+    <ClCompile Include="..\..\skynet-src\skynet_xlogger.c" />
     <ClCompile Include="..\..\skynet-src\skynet_main.c" />
     <ClCompile Include="..\..\skynet-src\skynet_module.c" />
     <ClCompile Include="..\..\skynet-src\skynet_monitor.c" />
@@ -201,7 +201,7 @@
     <ClInclude Include="..\..\skynet-src\skynet_harbor.h" />
     <ClInclude Include="..\..\skynet-src\skynet_imp.h" />
     <ClInclude Include="..\..\skynet-src\skynet_log.h" />
-    <ClInclude Include="..\..\skynet-src\skynet_logger.h" />
+    <ClInclude Include="..\..\skynet-src\skynet_xlogger.h" />
     <ClInclude Include="..\..\skynet-src\skynet_malloc.h" />
     <ClInclude Include="..\..\skynet-src\skynet_module.h" />
     <ClInclude Include="..\..\skynet-src\skynet_monitor.h" />

@@ -29,7 +29,7 @@
     <ClCompile Include="..\..\..\lualib-src\lua-crypt.c" />
     <ClCompile Include="..\..\..\lualib-src\lua-datasheet.c" />
     <ClCompile Include="..\..\..\lualib-src\lua-debugchannel.c" />
-    <ClCompile Include="..\..\..\lualib-src\lua-log.c" />
+    <ClCompile Include="..\..\..\lualib-src\lua-xlog.c" />
     <ClCompile Include="..\..\..\lualib-src\lua-memory.c" />
     <ClCompile Include="..\..\..\lualib-src\lua-mongo.c" />
     <ClCompile Include="..\..\..\lualib-src\lua-multicast.c" />

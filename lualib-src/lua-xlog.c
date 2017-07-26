@@ -3,7 +3,7 @@
 #include <lua.h>
 #include <lauxlib.h>
 
-#include "skynet_logger.h"
+#include "skynet_xlogger.h"
 
 static int 
 ldebug(lua_State *L) {
@@ -11,7 +11,7 @@ ldebug(lua_State *L) {
 	const char * s = luaL_checklstring(L, 1, &l);
 	char msg[LOG_MAX] = { 0 };
 	snprintf(msg, sizeof(msg), "[DEBUG] %s\n", s);
-	skynet_logger_append(msg, strlen(msg));
+	skynet_xlogger_append(msg, strlen(msg));
 	return 0;
 }
 
@@ -21,7 +21,7 @@ linfo(lua_State *L) {
 	const char * s = luaL_checklstring(L, 1, &l);
 	char msg[LOG_MAX] = { 0 };
 	snprintf(msg, sizeof(msg), "[INFO] %s\n", s);
-	skynet_logger_append(msg, strlen(msg));
+	skynet_xlogger_append(msg, strlen(msg));
 	return 0;
 }
 
@@ -31,7 +31,7 @@ lwarning(lua_State *L) {
 	const char * s = luaL_checklstring(L, 1, &l);
 	char msg[LOG_MAX] = { 0 };
 	snprintf(msg, sizeof(msg), "[WARNING] %s\n", s);
-	skynet_logger_append(msg, strlen(msg));
+	skynet_xlogger_append(msg, strlen(msg));
 	return 0;
 }
 
@@ -41,7 +41,7 @@ lerror(lua_State *L) {
 	const char * s = luaL_checklstring(L, 1, &l);
 	char msg[LOG_MAX] = { 0 };
 	snprintf(msg, sizeof(msg), "[ERROR] %s\n", s);
-	skynet_logger_append(msg, strlen(msg));
+	skynet_xlogger_append(msg, strlen(msg));
 	return 0;
 }
 
@@ -51,11 +51,11 @@ lfatal(lua_State *L) {
 	const char * s = luaL_checklstring(L, 1, &l);
 	char msg[LOG_MAX] = { 0 };
 	snprintf(msg, sizeof(msg), "[FATAL] %s\n", s);
-	skynet_logger_append(msg, strlen(msg));
+	skynet_xlogger_append(msg, strlen(msg));
 	return 0;
 }
 LUAMOD_API int 
-luaopen_skynet_log(lua_State *L) {
+luaopen_skynet_xlog_core(lua_State *L) {
 	luaL_checkversion(L);
 	luaL_Reg l[] =
 	{

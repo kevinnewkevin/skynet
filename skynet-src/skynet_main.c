@@ -155,6 +155,9 @@ main(int argc, char *argv[]) {
 	config.logger = optstring("logger", NULL);
 	config.logservice = optstring("logservice", "logger");
 	config.profile = optboolean("profile", 1);
+	config.install = optint("install", 0);
+	config.logdir = optstring("logdir", "logs");
+	config.logname = optstring("logname", "base");
 
 	lua_close(L);
 

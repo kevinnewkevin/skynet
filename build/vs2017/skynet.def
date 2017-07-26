@@ -139,4 +139,4 @@ EXPORTS
 	skynet_callback
 	skynet_current_handle
 
-	skynet_logger_append
+	skynet_xlogger_append

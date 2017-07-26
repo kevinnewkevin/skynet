@@ -21,3 +21,5 @@ build/vs2017/intermediate
 
 !build/vs2017/pthreadVC2.lib
 !pthreadVC2.dll
+
+logs

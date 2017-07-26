@@ -1,5 +1,5 @@
 #include "skynet.h"
-#include "skynet_logger.h"
+#include "skynet_xlogger.h"
 #include "spinlock.h"
 
 #include <unistd.h>
@@ -11,7 +11,6 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <assert.h>
-#include <pthread.h>
 #include <stdbool.h>
 
 #ifdef _MSC_VER
@@ -95,26 +94,32 @@ struct logger {
 	struct buffer_list sbuffers;
 	int running;
 
-	pthread_mutex_t mtx;
-	pthread_cond_t cond;
+	struct spinlock lock;
+	/*pthread_mutex_t mtx;
+	pthread_cond_t cond;*/
 };
 
 static struct logger *TI = NULL;
 
-static const char* get_log_filename(struct logger *inst) {
+static int get_file_size(const char *filename) {
+	int sz = -1;
+	struct stat statbuff;
+	if (stat(filename, &statbuff) < 0) {
+		return -1;
+	}
+	return statbuff.st_size;
+}
+
+static const char* get_log_filename(struct logger *inst, int index) {
 	memset(inst->filename, 0, 64);
 	struct tm tm;
 	time_t now = time(NULL);
 	localtime_r(&now, &tm);
-	if (tm.tm_year == inst->tm.tm_year && tm.tm_yday == inst->tm.tm_yday) {
-		inst->index++;
-	} else {
-		inst->index = 0;
-		inst->tm = tm;
-	}
+	
 	char timebuf[64] = { 0 };
 	strftime(timebuf, sizeof(timebuf), ".%Y%m%d", &tm);
-	snprintf(inst->filename, 128, "%s%s-%d.log", inst->basename, timebuf, inst->index);
+	snprintf(inst->filename, 128, "%s%s-%d.log", inst->basename, timebuf, index);
+	TI->tm = tm;
 	return inst->filename;
 }
 
@@ -190,40 +195,44 @@ static void rollfile(struct logger *inst) {
 
 	// 结束原来的
 	if (inst->handle != NULL && inst->written_bytes > 0) {
+		inst->written_bytes = 0;
 		fflush(inst->handle);
 		fclose(inst->handle);
 	}
 	check_dir(inst);
+	int index = TI->index;
 	while (1) {
 		char fullpath[128] = { 0 };
 		const char *dirname = inst->dirname;
-		const char *filename = get_log_filename(inst);
+		const char *filename = get_log_filename(inst, index);
 		snprintf(fullpath, 128, "%s/%s", dirname, filename);
-		FILE *f = fopen(fullpath, "a+");
-		if (f == NULL) {
-			int saved_errno = errno;
-			fprintf(stderr, "open file error: %s\n", strerror(saved_errno));
-			inst->handle = stdout;
-			break;
-		} else {
-			if (inst->written_bytes >= inst->rollsize) {
-				// 滚动日志文件
-				fclose(inst->handle);
-				inst->written_bytes = 0;
-				inst->index++;
-				continue;
-			}
 
-			struct tm tm;
-			time_t now = time(NULL);
-			localtime_r(&now, &tm);
-			inst->tm = tm;
-			break;
+		int sz = get_file_size(fullpath);
+		if (sz < 0) {
+			// create
+			FILE *f = fopen(fullpath, "a+");
+			if (f == NULL) {
+#ifdef _MSC_VER
+				fprintf(stderr, "open file error: %s\n", strsyserror(GetLastError()));
+#else
+				fprintf(stderr, "open file error: %s\n", strerror(errno));
+#endif // _MSC_VER
+				inst->handle = stdout;
+				break;
+			} else {
+
+				inst->handle = f;
+				inst->index = index;
+				break;
+			}
+		} else {
+
+			index++;
 		}
 	}
 }
 
-void skynet_logger_init(logger_level loglevel, const char *dirname, const char *basename) {
+void skynet_xlogger_init(logger_level loglevel, const char *dirname, const char *basename) {
 	struct logger *inst = (struct logger *)skynet_malloc(sizeof(*inst));
 	memset(inst, 0, sizeof(*inst));
 
@@ -254,8 +263,9 @@ void skynet_logger_init(logger_level loglevel, const char *dirname, const char *
 	else
 		strncpy(inst->basename, basename, 32);
 
-	pthread_mutex_init(&inst->mtx, NULL);
-	pthread_cond_init(&inst->cond, NULL);
+	/*pthread_mutex_init(&inst->mtx, NULL);
+	pthread_cond_init(&inst->cond, NULL);*/
+	SPIN_INIT(inst);
 
 	inst->running = 1;
 
@@ -265,79 +275,107 @@ void skynet_logger_init(logger_level loglevel, const char *dirname, const char *
 	return ;
 }
 
-void skynet_logger_exit() {
+void skynet_xlogger_exit() {
 	TI->running = 0;
-	pthread_mutex_destroy(TI->mtx);
-	pthread_cond_destroy(TI->cond);
+	/*pthread_mutex_destroy(TI->mtx);
+	pthread_cond_destroy(TI->cond);*/
+	SPIN_DESTROY(TI);
 	if (TI->handle)
 		fclose(TI->handle);
 }
 
-void skynet_logger_update() {
-	pthread_mutex_lock(&TI->mtx);
+void skynet_xlogger_update() {
+	//pthread_mutex_lock(&TI->mtx);
+	SPIN_LOCK(TI);
 	if (buffer_list_empty(&TI->wbuffers)) {
-		clock_gettime(CLOCK_REALTIME, &TI->ts);
+		/*clock_gettime(CLOCK_REALTIME, &TI->ts);
 		TI->ts.tv_sec += TI->flush_interval;
-		pthread_cond_timedwait(&TI->cond, &TI->mtx, &TI->ts);
-	}
-
-	struct tm tm;
-	time_t now = time(NULL);
-	localtime_r(&now, &tm);
-	// 新的一天，滚动日志
-	if (TI->tm.tm_yday != tm.tm_yday)
-		rollfile(TI);
-	if (buffer_list_empty(&TI->wbuffers)) {
-		pthread_mutex_unlock(&TI->mtx);
+		pthread_cond_timedwait(&TI->cond, &TI->mtx, &TI->ts);*/
+		SPIN_UNLOCK(TI);
+		sleep(TI->flush_interval);
 	} else {
-		struct buffer_list li = TI->wbuffers;
-		buffer_list_clear(&TI->wbuffers);
-		pthread_mutex_unlock(&TI->mtx);
+		struct tm tm;
+		time_t now = time(NULL);
+		localtime_r(&now, &tm);
+		// 新的一天，滚动日志
+		if (TI->tm.tm_yday != tm.tm_yday)
+			rollfile(TI);
 
-		struct buffer* node = li.head;
-		for (; node != NULL; node = node->next) {
-			if (TI->handle) {
+		// double check
+		if (buffer_list_empty(&TI->wbuffers)) {
+			SPIN_UNLOCK(TI);
+			//pthread_mutex_unlock(&TI->mtx);
+		} else {
+			struct buffer_list li = TI->wbuffers;
+			buffer_list_clear(&TI->wbuffers);
+			SPIN_UNLOCK(TI);
+			//pthread_mutex_unlock(&TI->mtx);
+
+			struct buffer* node = li.head;
+			for (; node != NULL; node = node->next) {
+				if (TI->handle) {
 #ifdef _MSC_VER
-				_fwrite_nolock(node->data, 1, node->size, TI->handle);
+					_fwrite_nolock(node->data, 1, node->size, TI->handle);
 #else
-				fwrite_unlocked(node->data, 1, node->size, TI->handle);
+					fwrite_unlocked(node->data, 1, node->size, TI->handle);
 #endif // _MSC_VER
+					memset(node, 0, sizeof(*node));
+					TI->written_bytes += node->size;
+				}
+			}
 
-				
-				TI->written_bytes += node->size;
+			if (TI->handle) {
+				fflush(TI->handle);
+			}
+			
+			// add sbuffers
+			node = li.head;
+			for (; node != NULL; node = node->next) {
+				buffer_list_push(&TI->sbuffers, node);
+			}
+
+			// roll
+			if (TI->written_bytes > TI->rollsize) {
+				rollfile(TI);
 			}
 		}
-
-		fflush(TI->handle);
-		if (TI->written_bytes > TI->rollsize) {
-			TI->index++;
-			rollfile(TI);
-		}
-
 	}
 }
 
-void skynet_logger_append(const char *src, size_t len) {
-	pthread_mutex_lock(&TI->mtx);
-	if (TI->curr_buffer->size + len < LOG_BUFFER_SIZE) {
-		// 当前缓冲区未满，将数据追加到末尾
-		memcpy(TI->curr_buffer->data + TI->curr_buffer->size, src, len);
-		TI->curr_buffer->size += len;
+void skynet_xlogger_append(const char *src, size_t len) {
+	//pthread_mutex_lock(&TI->mtx);
+	SPIN_LOCK(TI);
+	
+	char buffer[64] = { 0 };
+	time_t rawtime;
+	struct tm *info;
+	time(&rawtime);
+	info = localtime(&rawtime);
+	strftime(buffer, 80, "%x - %I:%M%p", info);
+	size_t buflen = strlen(buffer);
+
+	if (TI->curr_buffer->size + len + buflen < LOG_BUFFER_SIZE) {
 	} else {
 		buffer_list_push(&TI->wbuffers, TI->curr_buffer);
 
 		if (buffer_list_empty(&TI->sbuffers)) {
 			struct buffer *n = (struct buffer *)skynet_malloc(sizeof(*n));
+			memset(n, 0, sizeof(*n));
 			TI->curr_buffer = n;
 		} else {
 			struct buffer *n = buffer_list_pop(&TI->sbuffers);
 			TI->curr_buffer = n;
 		}
 
-		memcpy(TI->curr_buffer->data + TI->curr_buffer->size, src, len);
-		TI->curr_buffer->size += len;
-
-		pthread_cond_signal(&TI->cond);	// 通知后端开始写入日志
+		//pthread_cond_signal(&TI->cond);	// 通知后端开始写入日志
 	}
-	pthread_mutex_unlock(&TI->mtx);
+
+	memcpy(TI->curr_buffer->data + TI->curr_buffer->size, buffer, buflen);
+	TI->curr_buffer->size += buflen;
+	memcpy(TI->curr_buffer->data + TI->curr_buffer->size, src, len);
+	TI->curr_buffer->size += len;
+	
+	SPIN_UNLOCK(TI);
+
+	//pthread_mutex_unlock(&TI->mtx);
 }
