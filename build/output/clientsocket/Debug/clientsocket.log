@@ -1,0 +1,2 @@
+﻿  lua-clientsocket.c
+d:\ember\documents\github\chestnut\3rd\skynet\lualib-src\lua-clientsocket.c(11): fatal error C1083: Cannot open include file: 'pthread.h': No such file or directory

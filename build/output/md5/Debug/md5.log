@@ -1,0 +1,9 @@
+﻿  md5lib.c
+d:\ember\documents\github\chestnut\3rd\skynet\3rd\lua-md5\compat-5.2.h(15): warning C4273: 'luaL_setfuncs': inconsistent dll linkage
+  d:\ember\documents\github\chestnut\3rd\skynet\3rd\lua\lauxlib.h(99): note: see previous definition of 'luaL_setfuncs'
+  md5.c
+  compat-5.2.c
+d:\ember\documents\github\chestnut\3rd\skynet\3rd\lua-md5\compat-5.2.h(15): warning C4273: 'luaL_setfuncs': inconsistent dll linkage
+  d:\ember\documents\github\chestnut\3rd\skynet\3rd\lua\lauxlib.h(99): note: see previous definition of 'luaL_setfuncs'
+  Generating Code...
+LINK : fatal error LNK1104: cannot open file 'D:\Ember\Documents\github\chestnut\3rd\skynet\lua53.lib'

@@ -21,5 +21,9 @@ build/vs2017/intermediate
 
 !build/vs2017/pthreadVC2.lib
 !pthreadVC2.dll
+!libcrypto-1_1-x64.dll
+!libcrypto-1_1-x64.pdb
+!libssl-1_1-x64.dll
+!libssl-1_1-x64.pdb
 
 logs
