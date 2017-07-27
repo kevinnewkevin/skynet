@@ -1,3 +1,0 @@
-﻿  service_snlua.c
-d:\ember\documents\github\chestnut\3rd\skynet\service-src\service_snlua.c(121): warning C4244: 'initializing': conversion from 'lua_Integer' to '::size_t', possible loss of data
-LINK : fatal error LNK1104: cannot open file 'skynet.lib'

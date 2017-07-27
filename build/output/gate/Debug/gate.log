@@ -1,2 +1,0 @@
-﻿  service_gate.c
-d:\ember\documents\github\chestnut\3rd\skynet\skynet-src\skynet_compat.h(4): fatal error C1083: Cannot open include file: 'unistd.h': No such file or directory

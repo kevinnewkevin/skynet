@@ -1,8 +1,0 @@
-﻿  service_harbor.c
-d:\ember\documents\github\chestnut\3rd\skynet\service-src\service_harbor.c(246): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  c:\program files (x86)\windows kits\10\include\10.0.15063.0\ucrt\stdio.h(1772): note: see declaration of 'sprintf'
-d:\ember\documents\github\chestnut\3rd\skynet\service-src\service_harbor.c(617): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  c:\program files (x86)\windows kits\10\include\10.0.15063.0\ucrt\stdio.h(2260): note: see declaration of 'sscanf'
-d:\ember\documents\github\chestnut\3rd\skynet\service-src\service_harbor.c(721): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  c:\program files (x86)\windows kits\10\include\10.0.15063.0\ucrt\stdio.h(2260): note: see declaration of 'sscanf'
-LINK : fatal error LNK1104: cannot open file 'skynet.lib'
