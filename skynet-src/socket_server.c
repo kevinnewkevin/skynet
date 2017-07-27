@@ -512,12 +512,12 @@ open_socket(struct socket_server *ss, struct request_open * request, struct sock
 #ifdef _MSC_VER
 		status = connect(sock, ai_ptr->ai_addr, ai_ptr->ai_addrlen);
 		sp_nonblocking(sock);
+		if (status != 0 && WSAGetLastError() != WSAEINPROGRESS) {
 #else
 		sp_nonblocking(sock);
 		status = connect( sock, ai_ptr->ai_addr, ai_ptr->ai_addrlen);
+		if (status != 0 && errno != EINPROGRESS) {
 #endif
-
-		if ( status != 0 && errno != EINPROGRESS) {
 			close(sock);
 			sock = -1;
 			continue;
@@ -1150,12 +1150,22 @@ forward_message_tcp(struct socket_server *ss, struct socket *s, struct socket_lo
 	int n = (int)read(s->fd, buffer, sz);
 	if (n<0) {
 		FREE(buffer);
-		switch(errno) {
+#ifdef _MSC_VER
+		int err = WSAGetLastError();
+		switch (err) {
+		case WSAEINTR:
+			break;
+		case WSAEWOULDBLOCK:
+			fprintf(stderr, "socket-server: EAGAIN capture.\n");
+			break;
+#else
+		switch (errno) {
 		case EINTR:
 			break;
 		case AGAIN_WOULDBLOCK:
 			fprintf(stderr, "socket-server: EAGAIN capture.\n");
 			break;
+#endif // _MSC_VER
 		default:
 			// close when error
 			force_close(ss, s, l, result);
@@ -1471,9 +1481,16 @@ send_request(struct socket_server *ss, struct request_package *request, char typ
 	for (;;) {
 		ssize_t n = write(ss->sendctrl_fd, &request->header[6], len+2);
 		if (n<0) {
+#ifdef _MSC_VER
+			int err = WSAGetLastError();
+			if (err != WSAEINTR) {
+				fprintf(stderr, "socket-server : send ctrl command error %s.\n", strwsaerror(err));
+			}
+#else
 			if (errno != EINTR) {
 				fprintf(stderr, "socket-server : send ctrl command error %s.\n", strerror(errno));
 			}
+#endif // DEBUG
 			continue;
 		}
 		assert(n == len+2);
