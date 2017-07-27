@@ -1015,9 +1015,15 @@ block_readpipe(int pipefd, void *buffer, int sz) {
 	for (;;) {
 		int n = read(pipefd, buffer, sz);
 		if (n<0) {
+#ifdef _MSC_VER
+			int err = WSAGetLastError();
+			if (err == WSAEINTR) continue;
+			fprintf(stderr, "socket-server : read pipe error %s.\n", strwsaerror(err));
+#else
 			if (errno == EINTR)
 				continue;
-			fprintf(stderr, "socket-server : read pipe error %s.\n",strerror(errno));
+			fprintf(stderr, "socket-server : read pipe error %s.\n", strerror(errno));
+#endif // _MSC_VER
 			return;
 		}
 		// must atomic read from a pipe

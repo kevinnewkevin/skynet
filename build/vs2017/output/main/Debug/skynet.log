@@ -1,0 +1,42 @@
+﻿  socket_server.c
+d:\github\fork\chestnut\3rd\skynet\skynet-src\socket_server.c(1010): warning C4133: 'function': incompatible types - from 'int *' to 'const char *'
+d:\github\fork\chestnut\3rd\skynet\skynet-src\socket_server.c(1224): warning C4090: '=': different 'const' qualifiers
+d:\github\fork\chestnut\3rd\skynet\skynet-src\socket_server.c(1268): warning C4133: 'function': incompatible types - from 'int *' to 'char *'
+d:\github\fork\chestnut\3rd\skynet\skynet-src\socket_server.c(1449): warning C4133: 'function': incompatible types - from 'int *' to 'char *'
+  skynet_timer.c
+  skynet_start.c
+  skynet_socket.c
+  skynet_server.c
+c:\program files (x86)\windows kits\10\include\10.0.15063.0\um\winsock.h(856): warning C4273: 'gethostname': inconsistent dll linkage
+  d:\github\fork\chestnut\3rd\skynet\build\posix\unistd.h(62): note: see previous definition of 'gethostname'
+  skynet_mq.c
+  skynet_monitor.c
+c:\program files (x86)\windows kits\10\include\10.0.15063.0\um\winsock.h(856): warning C4273: 'gethostname': inconsistent dll linkage
+  d:\github\fork\chestnut\3rd\skynet\build\posix\unistd.h(62): note: see previous definition of 'gethostname'
+  skynet_module.c
+  skynet_main.c
+  skynet_xlogger.c
+c:\program files (x86)\windows kits\10\include\10.0.15063.0\um\winsock.h(856): warning C4273: 'gethostname': inconsistent dll linkage
+  d:\github\fork\chestnut\3rd\skynet\build\posix\unistd.h(62): note: see previous definition of 'gethostname'
+d:\github\fork\chestnut\3rd\skynet\skynet-src\skynet_xlogger.c(136): warning C4022: 'memcpy': pointer mismatch for actual parameter 2
+d:\github\fork\chestnut\3rd\skynet\skynet-src\skynet_xlogger.c(163): warning C4133: 'function': incompatible types - from 'char [64]' to 'LPCWSTR'
+  skynet_log.c
+  skynet_harbor.c
+  skynet_handle.c
+  skynet_error.c
+  skynet_env.c
+  skynet_daemon.c
+c:\program files (x86)\windows kits\10\include\10.0.15063.0\um\winsock.h(856): warning C4273: 'gethostname': inconsistent dll linkage
+  d:\github\fork\chestnut\3rd\skynet\build\posix\unistd.h(62): note: see previous definition of 'gethostname'
+d:\github\fork\chestnut\3rd\skynet\skynet-src\skynet_daemon.c(46): warning C4013: 'open' undefined; assuming extern returning int
+d:\github\fork\chestnut\3rd\skynet\skynet-src\skynet_daemon.c(86): warning C4013: 'dup2' undefined; assuming extern returning int
+d:\github\fork\chestnut\3rd\skynet\skynet-src\skynet_daemon.c(113): warning C4133: 'function': incompatible types - from 'char [1]' to 'HMODULE'
+d:\github\fork\chestnut\3rd\skynet\skynet-src\skynet_daemon.c(113): warning C4133: 'function': incompatible types - from 'char [260]' to 'LPWSTR'
+d:\github\fork\chestnut\3rd\skynet\skynet-src\skynet_daemon.c(132): warning C4133: 'function': incompatible types - from 'char [260]' to 'LPCWSTR'
+d:\github\fork\chestnut\3rd\skynet\skynet-src\skynet_daemon.c(141): warning C4033: 'daemon_install' must return a value
+  malloc_hook.c
+c:\program files (x86)\windows kits\10\include\10.0.15063.0\um\winsock.h(856): warning C4273: 'gethostname': inconsistent dll linkage
+  d:\github\fork\chestnut\3rd\skynet\build\posix\unistd.h(62): note: see previous definition of 'gethostname'
+  Generating Code...
+d:\github\fork\chestnut\3rd\skynet\skynet-src\skynet_daemon.c(147): warning C4715: 'daemon_install': not all control paths return a value
+LINK : fatal error LNK1104: cannot open file 'D:\github\fork\chestnut\3rd\skynet\lua53.lib'
