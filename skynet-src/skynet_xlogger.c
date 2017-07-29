@@ -149,7 +149,8 @@ static void check_dir(struct logger *inst) {
 	for (; i < offset; i++) {
 		char tmp[64] = { 0 };
 		int tmpoffset = 0;
-		for (size_t j = 0; j <= i; j++) {
+		int j = 0;
+		for (; j <= i; j++) {
 			int l = strlen(path[j]);
 			memcpy(tmp + tmpoffset, path[j], l);
 			tmpoffset += l;
