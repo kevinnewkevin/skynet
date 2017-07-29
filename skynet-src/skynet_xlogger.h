@@ -14,6 +14,6 @@ typedef enum logger_level {
 void skynet_xlogger_init(logger_level loglevel, const char *dirname, const char *basename);
 void skynet_xlogger_exit();
 void skynet_xlogger_update();
-void skynet_xlogger_append(const char *src, size_t len);
+void skynet_xlogger_append(logger_level level, const char *src, size_t len);
 
 #endif

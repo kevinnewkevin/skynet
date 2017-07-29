@@ -19,14 +19,14 @@
 #include <dirent.h>
 #endif // DEBUG
 
-#define ONE_MB	(1024*1024)
-#define DEFAULT_ROLL_SIZE (1024*ONE_MB)		// 日志文件达到1G，滚动一个新文件
-#define DEFAULT_BASENAME "default"
-#define DEFAULT_DIRNAME "logs"
-#define DEFAULT_INTERVAL 5					// 日志同步到磁盘间隔时间
+#define ONE_MB	          (1024*1024)
+#define DEFAULT_ROLL_SIZE (512*ONE_MB)		// 日志文件达到512M，滚动一个新文件
+#define DEFAULT_BASENAME  "default"
+#define DEFAULT_DIRNAME   "logs"
+#define DEFAULT_INTERVAL  5					// 日志同步到磁盘间隔时间
 
 
-#define LOG_BUFFER_SIZE 4*1024*1024			// 一个LOG缓冲区4M
+#define LOG_BUFFER_SIZE (2*ONE_MB)			// 一个LOG缓冲区4M
 
 struct buffer {
 	struct buffer* next;
@@ -70,9 +70,11 @@ static bool buffer_list_empty(struct buffer_list *li) {
 	return (li->head == li->tail && li->head == NULL);
 }
 
-static void buffer_list_clear(struct buffer_list *li) {
+static struct buffer_list buffer_list_clear(struct buffer_list *li) {
+	struct buffer_list res = *li;
 	li->head = NULL;
 	li->tail = NULL;
+	return res;
 }
 
 struct logger {
@@ -200,7 +202,7 @@ static void rollfile(struct logger *inst) {
 		fclose(inst->handle);
 	}
 	check_dir(inst);
-	int index = TI->index;
+	int index = TI->index + 1;
 	while (1) {
 		char fullpath[128] = { 0 };
 		const char *dirname = inst->dirname;
@@ -208,7 +210,24 @@ static void rollfile(struct logger *inst) {
 		snprintf(fullpath, 128, "%s/%s", dirname, filename);
 
 		int sz = get_file_size(fullpath);
-		if (sz < 0) {
+		if (sz <= 0) {
+			// create
+			FILE *f = fopen(fullpath, "w+");
+			if (f == NULL) {
+#ifdef _MSC_VER
+				fprintf(stderr, "open file error: %s\n", strsyserror(GetLastError()));
+#else
+				fprintf(stderr, "open file error: %s\n", strerror(errno));
+#endif // _MSC_VER
+				inst->handle = stdout;
+				break;
+			} else {
+
+				inst->handle = f;
+				inst->index = index;
+				break;
+			}
+		} else if (sz < inst->rollsize) {
 			// create
 			FILE *f = fopen(fullpath, "a+");
 			if (f == NULL) {
@@ -226,11 +245,12 @@ static void rollfile(struct logger *inst) {
 				break;
 			}
 		} else {
-
 			index++;
 		}
 	}
 }
+
+#define CHECK_ROLL(T) if ((T)->written_bytes > (T)->rollsize) rollfile(T);
 
 void skynet_xlogger_init(logger_level loglevel, const char *dirname, const char *basename) {
 	struct logger *inst = (struct logger *)skynet_malloc(sizeof(*inst));
@@ -267,7 +287,7 @@ void skynet_xlogger_init(logger_level loglevel, const char *dirname, const char 
 	pthread_cond_init(&inst->cond, NULL);*/
 	SPIN_INIT(inst);
 
-	inst->running = 1;
+	inst->running = 0;
 
 	TI = inst;
 
@@ -293,34 +313,42 @@ void skynet_xlogger_update() {
 		pthread_cond_timedwait(&TI->cond, &TI->mtx, &TI->ts);*/
 		SPIN_UNLOCK(TI);
 		sleep(TI->flush_interval);
+
+		struct tm tm;
+		time_t now = time(NULL);
+		localtime_r(&now, &tm);
+
+		CHECK_ROLL(TI);
 	} else {
 		struct tm tm;
 		time_t now = time(NULL);
 		localtime_r(&now, &tm);
-		// 新的一天，滚动日志
-		if (TI->tm.tm_yday != tm.tm_yday)
-			rollfile(TI);
+
+		CHECK_ROLL(TI);
 
 		// double check
 		if (buffer_list_empty(&TI->wbuffers)) {
 			SPIN_UNLOCK(TI);
 			//pthread_mutex_unlock(&TI->mtx);
 		} else {
-			struct buffer_list li = TI->wbuffers;
-			buffer_list_clear(&TI->wbuffers);
+			struct buffer_list li = buffer_list_clear(&TI->wbuffers);
 			SPIN_UNLOCK(TI);
 			//pthread_mutex_unlock(&TI->mtx);
 
 			struct buffer* node = li.head;
 			for (; node != NULL; node = node->next) {
 				if (TI->handle) {
+					size_t nbytes = 0;
+					while (nbytes < node->size) {
 #ifdef _MSC_VER
-					_fwrite_nolock(node->data, 1, node->size, TI->handle);
+						size_t n = _fwrite_nolock(node->data, 1, node->size, TI->handle);
 #else
-					fwrite_unlocked(node->data, 1, node->size, TI->handle);
+						size_t n = fwrite_unlocked(node->data, 1, node->size, TI->handle);
 #endif // _MSC_VER
-					memset(node, 0, sizeof(*node));
+						nbytes += n;
+					}
 					TI->written_bytes += node->size;
+					CHECK_ROLL(TI);
 				}
 			}
 
@@ -328,34 +356,55 @@ void skynet_xlogger_update() {
 				fflush(TI->handle);
 			}
 			
+			SPIN_LOCK(TI);
 			// add sbuffers
 			node = li.head;
 			for (; node != NULL; node = node->next) {
 				buffer_list_push(&TI->sbuffers, node);
 			}
+			SPIN_UNLOCK(TI);
 
 			// roll
-			if (TI->written_bytes > TI->rollsize) {
-				rollfile(TI);
-			}
+			CHECK_ROLL(TI);
 		}
 	}
 }
 
-void skynet_xlogger_append(const char *src, size_t len) {
+void skynet_xlogger_append(logger_level level, const char *src, size_t len) {
 	//pthread_mutex_lock(&TI->mtx);
 	SPIN_LOCK(TI);
 	
-	char buffer[64] = { 0 };
+	char buf[64] = { 0 };
 	time_t rawtime;
-	struct tm *info;
 	time(&rawtime);
-	info = localtime(&rawtime);
-	strftime(buffer, 80, "%x - %I:%M%p", info);
-	size_t buflen = strlen(buffer);
 
-	if (TI->curr_buffer->size + len + buflen < LOG_BUFFER_SIZE) {
-	} else {
+	struct tm *tm = localtime(&rawtime);
+	strftime(buf, 64, "[%F-%H:%M:%S]", tm);
+	size_t buflen = strlen(buf);
+
+	switch (level) {
+	case LOG_DEBUG:
+		snprintf(buf + buflen, 64 - buflen, "[DEBUG]");
+		break;
+	case LOG_INFO:
+		snprintf(buf + buflen, 64 - buflen, "[INFO]");
+		break;
+	case LOG_WARNING:
+		snprintf(buf + buflen, 64 - buflen, "[WARNING]");
+		break;
+	case LOG_ERROR:
+		snprintf(buf + buflen, 64 - buflen, "[ERROR]");
+		break;
+	case LOG_FATAL:
+		snprintf(buf + buflen, 64 - buflen, "[FATAL]");
+		break;
+	default:
+		break;
+	}
+	buflen = strlen(buf);
+
+	if (TI->curr_buffer->size + len + buflen > LOG_BUFFER_SIZE) {
+
 		buffer_list_push(&TI->wbuffers, TI->curr_buffer);
 
 		if (buffer_list_empty(&TI->sbuffers)) {
@@ -364,17 +413,18 @@ void skynet_xlogger_append(const char *src, size_t len) {
 			TI->curr_buffer = n;
 		} else {
 			struct buffer *n = buffer_list_pop(&TI->sbuffers);
+			memset(n, 0, sizeof(*n));
 			TI->curr_buffer = n;
 		}
 
 		//pthread_cond_signal(&TI->cond);	// 通知后端开始写入日志
 	}
 
-	memcpy(TI->curr_buffer->data + TI->curr_buffer->size, buffer, buflen);
+	memcpy(TI->curr_buffer->data + TI->curr_buffer->size, buf, buflen);
 	TI->curr_buffer->size += buflen;
 	memcpy(TI->curr_buffer->data + TI->curr_buffer->size, src, len);
 	TI->curr_buffer->size += len;
-	
+	TI->curr_buffer->data[TI->curr_buffer->size++] = '\n';
 	SPIN_UNLOCK(TI);
 
 	//pthread_mutex_unlock(&TI->mtx);
