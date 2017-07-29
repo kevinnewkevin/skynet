@@ -206,25 +206,19 @@ ssize_t read(int fd, void *buf, size_t count) {
 		}
 		return ptr - (char *) buf;
 	} else if (fd == recvfd) {
-		int err = recv(fd, buf, count, 0);
-		if (err == SOCKET_ERROR) {
-			if (WSAGetLastError() == WSAECONNRESET) {
-				return 0;
-			}
+		int nbytes = recv(fd, buf, count, 0);
+		if (nbytes == SOCKET_ERROR) {
 			return -1;
 		}
-		InterlockedAdd(&readbytes, err);
+		InterlockedAdd(&readbytes, nbytes);
 		//fprintf(stderr, "read recvfd %d bytes\n", err);
-		return err;
+		return nbytes;
 	} else {
-		int err = recv(fd, buf, count, 0);
-		if (err == SOCKET_ERROR) {
-			if (WSAGetLastError() == WSAECONNRESET) {
-				return 0;
-			}
+		int nbytes = recv(fd, buf, count, 0);
+		if (nbytes == SOCKET_ERROR) {
 			return -1;
 		}
-		return err;
+		return nbytes;
 	}
 }
 

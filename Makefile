@@ -8,6 +8,8 @@ SKYNET_BUILD_PATH ?= .
 CFLAGS = -g -O2 -Wall -I$(LUA_INC) $(MYCFLAGS)
 # CFLAGS += -DUSE_PTHREAD_LOCK
 
+CFLAGS += -DHAVE_XLOGGER
+
 # lua
 
 LUA_STATICLIB := 3rd/lua/liblua.a
@@ -64,12 +66,13 @@ LUA_CLIB_SKYNET = \
   lua-mysqlaux.c \
   lua-debugchannel.c \
   lua-datasheet.c \
+  lua-xlog.c \
   \
 
 SKYNET_SRC = skynet_main.c skynet_handle.c skynet_module.c skynet_mq.c \
   skynet_server.c skynet_start.c skynet_timer.c skynet_error.c \
   skynet_harbor.c skynet_env.c skynet_monitor.c skynet_socket.c socket_server.c \
-  malloc_hook.c skynet_daemon.c skynet_log.c
+  malloc_hook.c skynet_daemon.c skynet_log.c skynet_xlogger.c
 
 all : \
   $(SKYNET_BUILD_PATH)/skynet \
