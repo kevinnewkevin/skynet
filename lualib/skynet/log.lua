@@ -4,7 +4,7 @@ local debug = debug
 local string_format = string.format
 local skynet_error = skynet.error
 local daemon = skynet.getenv("daemon")
-local test = true
+local test = false
 
 local _M = {}
 
