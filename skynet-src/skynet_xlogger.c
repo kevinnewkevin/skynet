@@ -104,7 +104,6 @@ struct logger {
 static struct logger *TI = NULL;
 
 static int get_file_size(const char *filename) {
-	int sz = -1;
 	struct stat statbuff;
 	if (stat(filename, &statbuff) < 0) {
 		return -1;
@@ -126,7 +125,8 @@ static const char* get_log_filename(struct logger *inst, int index) {
 }
 
 static void check_dir(struct logger *inst) {
-	char path[32][32] = { 0 };  // ×î¶à32¸ö
+	char path[32][32];  // max 32
+	memset(path, 0, 32 * 32);
 	int offset = 0;
 	int s = 0;
 	int p = 0;
