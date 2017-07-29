@@ -126,7 +126,6 @@ static const char* get_log_filename(struct logger *inst, int index) {
 }
 
 static void check_dir(struct logger *inst) {
-#ifdef _MSC_VER
 	char path[32][32] = { 0 };  // 最多32个
 	int offset = 0;
 	int s = 0;
@@ -157,6 +156,8 @@ static void check_dir(struct logger *inst) {
 			tmp[tmpoffset] = '\\';
 			tmpoffset++;
 #else
+			tmp[tmpoffset] = '/';
+			tmpoffset++;
 #endif // _MSC_VER
 		}
 		tmpoffset--;
@@ -168,27 +169,25 @@ static void check_dir(struct logger *inst) {
 		} else if (attr & FILE_ATTRIBUTE_DIRECTORY) { // dir
 		}
 #else
+		// 如果不存在，创建文件夹
+		DIR* dir = opendir(tmp);
+		if (dir == NULL) {
+			switch (errno) {
+			case ENOENT:
+				if (mkdir(tmp, 0755) == -1) {
+					fprintf(stderr, "mkdir error: %s\n", strerror(errno));
+					exit(EXIT_FAILURE);
+				}
+				break;
+			default:
+				fprintf(stderr, "opendir error: %s\n", strerror(errno));
+				exit(EXIT_FAILURE);
+				break;
+			}
+		} else
+			closedir(dir);
 #endif // _MSC_VER
 	}
-#else
-	// 如果不存在，创建文件夹
-	DIR* dir;
-	dir = opendir(inst.dirname);
-	if (dir == NULL) {
-		int saved_errno = errno;
-		if (saved_errno == ENOENT) {
-			if (mkdir(inst.dirname, 0755) == -1) {
-				saved_errno = errno;
-				fprintf(stderr, "mkdir error: %s\n", strerror(saved_errno));
-				exit(EXIT_FAILURE);
-			}
-		} else {
-			fprintf(stderr, "opendir error: %s\n", strerror(saved_errno));
-			exit(EXIT_FAILURE);
-		}
-	} else
-		closedir(dir);
-#endif // _MSC_VER
 }
 
 static void rollfile(struct logger *inst) {
