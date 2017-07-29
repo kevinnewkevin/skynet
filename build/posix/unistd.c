@@ -52,9 +52,8 @@ int clock_gettime(int what, struct timespec *tp) {
 		LARGE_INTEGER freq, cur;
 		QueryPerformanceFrequency(&freq);
 		QueryPerformanceCounter(&cur);
-		long long ns = cur.QuadPart * NANOSEC / freq.QuadPart;
-		tp->tv_sec = ns / NANOSEC;
-		tp->tv_nsec = ns % NANOSEC;
+		tp->tv_sec = cur.QuadPart / freq.QuadPart; // sec
+		tp->tv_nsec = cur.QuadPart % freq.QuadPart * NANOSEC / freq.QuadPart;
 		return 0;
 	}
 	case CLOCK_REALTIME: {
@@ -68,9 +67,8 @@ int clock_gettime(int what, struct timespec *tp) {
 		LARGE_INTEGER freq, cur;
 		QueryPerformanceFrequency(&freq);
 		QueryPerformanceCounter(&cur);
-		long long ns = cur.QuadPart * NANOSEC / freq.QuadPart;
-		tp->tv_sec = ns / NANOSEC;
-		tp->tv_nsec = ns % NANOSEC;
+		tp->tv_sec = cur.QuadPart / freq.QuadPart; // sec
+		tp->tv_nsec = cur.QuadPart % freq.QuadPart * NANOSEC / freq.QuadPart;
 		return 0;
 	}
 	default:
