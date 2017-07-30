@@ -11,8 +11,8 @@ struct skynet_config {
 	const char * bootstrap;
 	const char * logger;
 	const char * logservice;
-	const char * logdir;
-	const char * logname;
+	const char * logpath;
+	const char * logbasename;
 };
 
 #define THREAD_WORKER 0

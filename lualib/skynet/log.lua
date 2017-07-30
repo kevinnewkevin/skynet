@@ -4,7 +4,7 @@ local debug = debug
 local string_format = string.format
 local skynet_error = skynet.error
 local daemon = skynet.getenv("daemon")
-local test = true
+local test = false
 
 local _M = {}
 
@@ -14,7 +14,7 @@ function _M.debug(fmt, ...)
 	if info then
 		msg = string.format("[%s][%s:%d] %s", SERVICE_NAME, info.short_src, info.currentline, msg)
 	end
-	if test or daemon then
+	if test and daemon then
 		logger.debug(msg)
 	else
 		local info = string_format("[debug] %s", msg)
@@ -28,7 +28,7 @@ function _M.info(fmt, ...)
 	if info then
 		msg = string.format("[%s][%s:%d] %s", SERVICE_NAME, info.short_src, info.currentline, msg)
 	end
-	if test or daemon then
+	if test and daemon then
 		logger.info(msg)
 	else
 		local info = string_format("[info] %s", msg)
@@ -42,7 +42,7 @@ function _M.warning(fmt, ...)
 	if info then
 		msg = string.format("[%s:%d] %s", info.short_src, info.currentline, msg)
 	end
-	if test or daemon then
+	if test and daemon then
 		logger.warning(msg)
 	else
 		local info = string_format("[warn] %s", msg)
@@ -56,7 +56,7 @@ function _M.error(fmt, ...)
 	if info then
 		msg = string.format("[%s:%d] %s", info.short_src, info.currentline, msg)
 	end
-	if test or daemon then
+	if test and daemon then
 		logger.error(msg)
 	else
 		local info = string_format("[error] %s", msg)
@@ -70,7 +70,7 @@ function _M.fatal(fmt, ...)
 	if info then
 		msg = string.format("[%s:%d] %s", info.short_src, info.currentline, msg)
 	end
-	if test or daemon then
+	if test and daemon then
 		logger.fatal(msg)
 	else
 		local info = string_format("[fatal] %s", msg)

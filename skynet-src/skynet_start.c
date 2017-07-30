@@ -321,7 +321,7 @@ skynet_start(struct skynet_config * config) {
 	skynet_socket_init();
 	skynet_profile_enable(config->profile);
 #ifdef HAVE_XLOGGER
-	skynet_xlogger_init(LOG_FATAL, NULL, NULL);
+	skynet_xlogger_init(LOG_FATAL, config->logpath, config->logbasename);
 #endif // LOGGER
 
 	struct skynet_context *ctx = skynet_context_new(config->logservice, config->logger);
