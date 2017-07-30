@@ -148,6 +148,10 @@ int daemon_install(void) {
 
 int
 daemon_init(const char *pidfile) {
+#ifdef _MSC_VER
+	return 0;
+#endif // _MSC_VER
+
 	int pid = check_pid(pidfile);
 
 	if (pid) {
@@ -178,5 +182,9 @@ daemon_init(const char *pidfile) {
 
 int
 daemon_exit(const char *pidfile) {
+#ifdef _MSC_VER
+	return 0;
+#else
 	return unlink(pidfile);
+#endif // _MSC_VER
 }

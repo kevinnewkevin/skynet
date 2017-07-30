@@ -134,19 +134,29 @@ static void check_dir(struct logger *inst) {
 	assert(len > 0);
 	while (p < len) {
 		if (inst->dirname[p] == '\\' || inst->dirname[p] == '/') {
-			memcpy(path[offset], inst->dirname[s], p - s);
-			offset++;
-			s = ++p;
+			int c = memcmp(".", &inst->dirname[s], p - s);
+			if (c != 0) {
+				memcpy(path[offset], &inst->dirname[s], p - s);
+				offset++;
+				s = ++p;
+			} else {
+				s = ++p;
+			}
 		} else {
 			p++;
 		}
 	}
 	assert(len == p);
-	memcpy(path[offset], &inst->dirname[s], p - s);
-	offset++;
+	if (p > s) {
+		memcpy(path[offset], &inst->dirname[s], p - s);
+		offset++;
+	}
 
 	int i = 0;
 	for (; i < offset; i++) {
+		if (strncmp(path[i], "..", 2) == 0) {
+			continue;
+		}
 		char tmp[64] = { 0 };
 		int tmpoffset = 0;
 		int j = 0;
