@@ -194,7 +194,6 @@
     <ClInclude Include="..\..\skynet-src\malloc_hook.h" />
     <ClInclude Include="..\..\skynet-src\rwlock.h" />
     <ClInclude Include="..\..\skynet-src\skynet.h" />
-    <ClInclude Include="..\..\skynet-src\skynet_compat.h" />
     <ClInclude Include="..\..\skynet-src\skynet_daemon.h" />
     <ClInclude Include="..\..\skynet-src\skynet_env.h" />
     <ClInclude Include="..\..\skynet-src\skynet_handle.h" />
@@ -209,7 +208,6 @@
     <ClInclude Include="..\..\skynet-src\skynet_server.h" />
     <ClInclude Include="..\..\skynet-src\skynet_socket.h" />
     <ClInclude Include="..\..\skynet-src\skynet_timer.h" />
-    <ClInclude Include="..\..\skynet-src\socket_cpoll.h" />
     <ClInclude Include="..\..\skynet-src\socket_epoll.h" />
     <ClInclude Include="..\..\skynet-src\socket_kqueue.h" />
     <ClInclude Include="..\..\skynet-src\socket_poll.h" />

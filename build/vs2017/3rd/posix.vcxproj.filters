@@ -69,6 +69,12 @@
     <ClInclude Include="..\..\posix\atomicwin.h">
       <Filter>Source files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\posix\skynet_compat.h">
+      <Filter>Source files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\posix\socket_cpoll.h">
+      <Filter>Source files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="posix.def">

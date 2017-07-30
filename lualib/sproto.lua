@@ -209,9 +209,9 @@ function host:dispatch(...)
 			result = core.decode(proto.request, content)
 		end
 		if header_tmp.session then
-			return "REQUEST", proto.name, result, gen_response(self, proto.response, header_tmp.session), header.ud, ...
+			return "REQUEST", proto.name, result, gen_response(self, proto.response, header_tmp.session), header.ud
 		else
-			return "REQUEST", proto.name, result, nil, header.ud, ...
+			return "REQUEST", proto.name, result, nil, header.ud
 		end
 	else
 		-- response

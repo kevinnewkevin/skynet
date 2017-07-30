@@ -34,6 +34,8 @@
     <ClInclude Include="..\..\posix\pthread.h" />
     <ClInclude Include="..\..\posix\sched.h" />
     <ClInclude Include="..\..\posix\semaphore.h" />
+    <ClInclude Include="..\..\posix\skynet_compat.h" />
+    <ClInclude Include="..\..\posix\socket_cpoll.h" />
     <ClInclude Include="..\..\posix\sys\file.h" />
     <ClInclude Include="..\..\posix\sys\socket.h" />
     <ClInclude Include="..\..\posix\unistd.h" />

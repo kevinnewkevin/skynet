@@ -111,9 +111,6 @@
     <ClInclude Include="..\..\skynet-src\skynet_timer.h">
       <Filter>Source files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\skynet-src\socket_cpoll.h">
-      <Filter>Source files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\skynet-src\socket_epoll.h">
       <Filter>Source files</Filter>
     </ClInclude>
@@ -127,9 +124,6 @@
       <Filter>Source files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\skynet-src\spinlock.h">
-      <Filter>Source files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\skynet-src\skynet_compat.h">
       <Filter>Source files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\skynet-src\skynet_xlogger.h">
