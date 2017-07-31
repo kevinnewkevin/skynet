@@ -38,11 +38,8 @@ lconnect(lua_State *L) {
 		return luaL_error(L, "Connect %s %d failed", addr, port);
 	}
 
-#ifdef _MSC_VER
-#else
 	int flag = fcntl(fd, F_GETFL, 0);
 	fcntl(fd, F_SETFL, flag | O_NONBLOCK);
-#endif // _MSC_VER
 
 	lua_pushinteger(L, fd);
 
