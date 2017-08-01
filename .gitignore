@@ -18,6 +18,8 @@
 *.exe
 build/vs2017/.vs
 build/vs2017/intermediate
+logs
+.vs
 
 !build/vs2017/pthreadVC2.lib
 !pthreadVC2.dll
@@ -26,4 +28,3 @@ build/vs2017/intermediate
 !libssl-1_1-x64.dll
 !libssl-1_1-x64.pdb
 
-logs

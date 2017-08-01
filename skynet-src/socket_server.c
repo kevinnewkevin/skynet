@@ -1793,7 +1793,7 @@ socket_server_udp(struct socket_server *ss, uintptr_t opaque, const char * addr,
 }
 
 int 
-socket_server_udp_send(struct socket_server *ss, int id, const struct socket_udp_address *addr, const char *buffer, int sz) {
+socket_server_udp_send(struct socket_server *ss, int id, const struct socket_udp_address *addr, const void *buffer, int sz) {
 	struct socket * s = &ss->slot[HASH_ID(id)];
 	if (s->id != id || s->type == SOCKET_TYPE_INVALID) {
 		free_buffer(ss, buffer, sz);
