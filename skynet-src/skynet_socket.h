@@ -1,4 +1,4 @@
-﻿#ifndef skynet_socket_h
+#ifndef skynet_socket_h
 #define skynet_socket_h
 
 struct skynet_context;

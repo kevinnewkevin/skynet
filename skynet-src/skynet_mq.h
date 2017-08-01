@@ -1,4 +1,4 @@
-﻿#ifndef SKYNET_MESSAGE_QUEUE_H
+#ifndef SKYNET_MESSAGE_QUEUE_H
 #define SKYNET_MESSAGE_QUEUE_H
 
 #include <stdlib.h>
