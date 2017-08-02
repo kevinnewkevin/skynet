@@ -276,7 +276,7 @@ dispatch_socket_message(struct gate *g, const struct skynet_socket_message * mes
 }
 
 static int
-_cb(struct skynet_context * ctx, void * ud, int type, int session, uint32_t source, const void * msg, size_t sz) {
+_cb(struct skynet_context * ctx, void * ud, int type, int session, uint32_t source, const char * msg, size_t sz) {
 	struct gate *g = ud;
 	switch(type) {
 	case PTYPE_TEXT:

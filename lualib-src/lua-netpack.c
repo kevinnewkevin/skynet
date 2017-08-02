@@ -30,7 +30,7 @@
 struct netpack {
 	int id;
 	int size;
-	void * buffer;
+	char * buffer;
 };
 
 struct uncomplete {
