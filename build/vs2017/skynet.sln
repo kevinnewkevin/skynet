@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.14
+VisualStudioVersion = 15.0.26430.15
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "skynet", "skynet.vcxproj", "{C1C5A948-62E4-4D4F-9551-636CBB5ECC55}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -49,6 +49,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "posix", "3rd\posix.vcxproj", "{44F52237-AE31-499F-A74C-4E02B0FAD898}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sproto", "lualib\sproto.vcxproj", "{D673AEC1-6021-4164-8F6A-F60231469ADE}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lua", "lua.vcxproj", "{B7CAF74D-DFB8-4A3C-8CCF-30C21871AD50}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -146,6 +148,14 @@ Global
 		{D673AEC1-6021-4164-8F6A-F60231469ADE}.Release|Win32.Build.0 = Release|Win32
 		{D673AEC1-6021-4164-8F6A-F60231469ADE}.Release|x64.ActiveCfg = Release|x64
 		{D673AEC1-6021-4164-8F6A-F60231469ADE}.Release|x64.Build.0 = Release|x64
+		{B7CAF74D-DFB8-4A3C-8CCF-30C21871AD50}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B7CAF74D-DFB8-4A3C-8CCF-30C21871AD50}.Debug|Win32.Build.0 = Debug|Win32
+		{B7CAF74D-DFB8-4A3C-8CCF-30C21871AD50}.Debug|x64.ActiveCfg = Debug|x64
+		{B7CAF74D-DFB8-4A3C-8CCF-30C21871AD50}.Debug|x64.Build.0 = Debug|x64
+		{B7CAF74D-DFB8-4A3C-8CCF-30C21871AD50}.Release|Win32.ActiveCfg = Release|Win32
+		{B7CAF74D-DFB8-4A3C-8CCF-30C21871AD50}.Release|Win32.Build.0 = Release|Win32
+		{B7CAF74D-DFB8-4A3C-8CCF-30C21871AD50}.Release|x64.ActiveCfg = Release|x64
+		{B7CAF74D-DFB8-4A3C-8CCF-30C21871AD50}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
